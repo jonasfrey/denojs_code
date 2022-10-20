@@ -73,4 +73,28 @@ var a_o_image1 = [{
 var a_o_image = a_o_image1; 
 
 
+// import { readJSON, writeJSON, readXLSX } from 'https://deno.land/x/flat@0.0.15/mod.ts'
+// var s_path_file = "./Exeltabelle für Puppenbildervideo 2.xlsx"
+// const data = await readXLSX(s_path_file)
+// // var s_csv = await Deno.readTextFile(s_path_file);
+// // a_o_image = CSVtoJSON(s_csv)
+
+// console.log(data)
+
+var s_path_file = "./csv_input.txt"
+var s_text = await Deno.readTextFile(s_path_file)
+var a_s_line = s_text.split("\n");
+var a_o_image = [] 
+for(var s_line of a_s_line){
+    if(s_line.split("\t")[1].trim() == "Bildname"){
+        continue
+    }
+    a_o_image.push(
+        {
+            s_text: s_line.split("\t")[0].trim().normalize("NFD"),
+            s_image_name: s_line.split("\t")[1].trim().normalize("NFD"),
+        }
+    )
+}
+console.log(a_o_image)
 export {a_o_image}

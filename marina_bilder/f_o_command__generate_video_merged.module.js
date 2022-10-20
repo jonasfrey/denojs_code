@@ -40,14 +40,16 @@ var f_o_command__generate_video_merged = async function(
         "0",
         "-i",
         s_path_file_text_tmp,
+        // "-filter_complex",
+        // "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1",
         "-c",
         "copy",
         s_path_video_merged
     ]
 
     var o_command = await f_o_command(a_s_arg);
-    console.log(o_command)
-    Deno.exit(1)
+    // console.log(o_command)
+    // Deno.exit(1)
     return Promise.resolve(o_command)
 
 }
