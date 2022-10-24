@@ -245,8 +245,19 @@ let n_index = 0
 for(var o_object_2d of a_o_object_2d__wall){
     n_index+=1//that wont work
     o_object_2d.f_render_function = function(){
-        // this.s_color_rgba = `rgba(${Math.random()*255},0,0,1)`
-        this.s_color_rgba = `rgba(${Math.sin(n_id_animation*0.01+this.n_x+this.n_y*0.1)*(255/2)+(255/2)},0,0,1)`
+        // this.s_color_rgba = `rgba(${Math.random()*255},0,0,1)` // random
+        // this.s_color_rgba = `rgba(${Math.sin(n_id_animation*0.01+this.n_x+this.n_y*0.1)*(255/2)+(255/2)},0,0,1)` // psychedelic
+        var o_object_2d__player = a_o_object_2d.filter(o=>o.s_name == "player")[0];
+        if(o_object_2d__player){
+
+            var n_delta_x = this.n_x - o_object_2d__player.n_x;
+            var n_delta_y = this.n_y - o_object_2d__player.n_y;
+            var n_distance_to_player = Math.sqrt(n_delta_x**2 + n_delta_y**2);
+            var n_distance_to_player_normalized = n_distance_to_player / 3;
+            var n_u8_color_value = (255-n_distance_to_player_normalized*255) + Math.random()*40*n_distance_to_player_normalized
+            this.s_color_rgba = `rgba(${n_u8_color_value},${Math.random()*n_u8_color_value*0.5},0,1)` // psychedelic
+        }
+
     }
 }
 a_o_object_2d = a_o_object_2d.concat(a_o_object_2d__wall);
