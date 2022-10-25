@@ -17,6 +17,18 @@ document.body.style.padding = "0";
 document.body.style.overflow = "hidden";
 
 var o_canvas = document.createElement("canvas");
+var n_x_normalized_mouse = 0;
+var n_y_normalized_mouse = 0;
+o_canvas.onmousemove = function(){
+    var o_bounding_client_rect = document.querySelector("canvas").getBoundingClientRect();
+    
+    n_x_normalized_mouse = (window.event.clientX  - o_bounding_client_rect.left) / o_bounding_client_rect.width;
+    n_y_normalized_mouse = (window.event.clientY  - o_bounding_client_rect.top) / o_bounding_client_rect.height;
+
+    // console.log(n_x_normalized_mouse)
+    // const x = e.pageX - e.currentTarget.offsetLeft; 
+    // const y = e.pageY - e.currentTarget.offsetTop; 
+}
 document.body.appendChild(o_canvas);
 
 // class O_game{
@@ -28,6 +40,22 @@ document.body.appendChild(o_canvas);
 
 //     }
 // }
+
+class O_graph_node{
+    constructor(
+        o_object_2d, 
+        o_graph_node__left,
+        o_graph_node__right,
+        o_graph_node__up,
+        o_graph_node__down,
+    ){
+        this.o_object_2d = o_object_2d
+        this.o_graph_node__left = o_graph_node__left
+        this.o_graph_node__right = o_graph_node__right
+        this.o_graph_node__up = o_graph_node__up
+        this.o_graph_node__down = o_graph_node__down
+    }
+}
 class O_object_2d{
     constructor(
         n_x, 
@@ -43,7 +71,7 @@ class O_object_2d{
         this.s_color_rgba = s_color_rgba
         this.f_render_function = (f_render_function) ? f_render_function : null;
         this.s_name = (s_name) ? s_name : ""
-
+        this.b_hover_mouse = false
     }
 }
 var f_render_function__random_color = function(){
@@ -165,9 +193,13 @@ var f_player_demo = function(){
                     this.n_y = n_y
                 }
                 console.log(this.n_x_initial)
-
             }
 
+            if(this.b_hover_mouse){
+                this.s_color_rgba = "rgba(255,255,0,1)"
+            }else{
+                this.s_color_rgba = "rgba(0,255,0,1)"
+            }
             
         }, 
         "player"
@@ -219,14 +251,26 @@ var f_render = function(){
     n_ts_ms_now = window.performance.now();
     n_ts_ms_delta = n_ts_ms_now - n_ts_ms_last;
 
-    
+    var n_x_mouse_scale = parseInt(n_x_normalized_mouse * n_scale_x);
+    var n_y_mouse_scale = parseInt(n_y_normalized_mouse * n_scale_y);
 
     o_ctx.fillStyle = s_color_rgba__clear
     o_ctx.fillRect(0,0,n_scale_x,n_scale_y);
 
     let n_index_a_o_object_2d = 0;
+    
     while(n_index_a_o_object_2d < a_o_object_2d.length){
         let o_object_2d = a_o_object_2d[n_index_a_o_object_2d];
+        if(
+            n_x_mouse_scale == parseInt(o_object_2d.n_x)
+            &&
+            n_y_mouse_scale == parseInt(o_object_2d.n_y)
+            ){
+                o_object_2d.b_hover_mouse = true
+        }else{
+            o_object_2d.b_hover_mouse = false
+        }
+
         if(o_object_2d.f_render_function){
             o_object_2d.f_render_function();
         }
@@ -246,7 +290,7 @@ var f_render = function(){
     n_fps = 1000.0 / n_ts_ms_delta;
     // o_ctx.font = '10px sans';
     // o_ctx.fillText(`FPS:${n_fps}`, 1, 1);
-    console.log(`FPS:${n_fps}`)
+    // console.log(`FPS:${n_fps}`)
     
     n_ts_ms_last = n_ts_ms_now;
     a_n_keycode_keydown_game_lastframe = a_n_keycode_keydown_game
@@ -258,17 +302,67 @@ var f_render_recursive = function(){
 
 
 
-var a_o_object_2d__wall = await f_a_o_object_2d__wall_and_path()
+var a_o_object_2d__wall_and_path = await f_a_o_object_2d__wall_and_path()
+
+var a_o_graph_node = []
+for(var o_object_2d of a_o_object_2d__wall_and_path){
+    if(o_object_2d.s_name == "path"){
+        var o_graph_node = new O_graph_node(
+            o_object_2d, 
+            null,
+            null,
+            null,
+            null,
+        )
+        a_o_graph_node.push(o_graph_node)
+    }
+}
+
+var a_s_side = [
+    "left", 
+    "right", 
+    "up", 
+    "down"
+]
+for(var o_graph_node of a_o_graph_node){ 
+    for(var s_side of a_s_side){
+        if(s_side == "left"){
+            var n_x = o_graph_node.o_object_2d.n_x + -1;
+            var n_y = o_graph_node.o_object_2d.n_y +  0;
+        }
+        if(s_side == "right"){
+            var n_x = o_graph_node.o_object_2d.n_x + +1;
+            var n_y = o_graph_node.o_object_2d.n_y +  0;
+        }
+        if(s_side == "up"){
+            var n_x = o_graph_node.o_object_2d.n_x +  0;
+            var n_y = o_graph_node.o_object_2d.n_y + -1;
+        }
+        if(s_side == "down"){
+            var n_x = o_graph_node.o_object_2d.n_x +  0;
+            var n_y = o_graph_node.o_object_2d.n_y + +1;
+        }
+        var o_graph_node__connected = a_o_graph_node.filter(
+            o => 
+                parseInt(o.o_object_2d.n_x) == parseInt(n_x)
+                &&
+                parseInt(o.o_object_2d.n_y) == parseInt(n_y)
+        )[0]
+        if(o_graph_node__connected){
+            o_graph_node[`o_graph_node__${s_side}`] = o_graph_node__connected
+        }
+    }
+}
+console.log(a_o_graph_node)
 
 let n_index = 0
-for(var o_object_2d of a_o_object_2d__wall){
+for(var o_object_2d of a_o_object_2d__wall_and_path){
     n_index+=1//that wont work
     o_object_2d.f_render_function = function(){
         // this.s_color_rgba = `rgba(${Math.random()*255},0,0,1)` // random
         // this.s_color_rgba = `rgba(${Math.sin(n_id_animation*0.01+this.n_x+this.n_y*0.1)*(255/2)+(255/2)},0,0,1)` // psychedelic
         var o_object_2d__player = a_o_object_2d.filter(o=>o.s_name == "player")[0];
         if(o_object_2d__player){
-
             var n_delta_x = this.n_x - o_object_2d__player.n_x;
             var n_delta_y = this.n_y - o_object_2d__player.n_y;
             var n_distance_to_player = Math.sqrt(n_delta_x**2 + n_delta_y**2);
@@ -279,7 +373,72 @@ for(var o_object_2d of a_o_object_2d__wall){
 
     }
 }
-a_o_object_2d = a_o_object_2d.concat(a_o_object_2d__wall);
+var a_o_object_2d__path = a_o_object_2d.filter(
+    o => o.s_name == "path"
+)
+
+var f_a_o_graph_node__connected = function(
+    o_graph_node
+){
+    var a_o_graph_node__connected = []
+    for(var s_side of a_s_side){
+        var o_graph_node__connected = o_graph_node[`o_graph_node__${s_side}`]
+        if(o_graph_node__connected){
+            a_o_graph_node__connected.push(o_graph_node__connected)
+        }
+    }
+    return a_o_graph_node__connected
+}
+
+var f_a_o_graph_node__recursive_lt3 = function(o_graph_node, a_o_graph_node = []){
+    // console.log(a_o_graph_node)
+    
+    if(a_o_graph_node.indexOf(o_graph_node) == -1){
+        a_o_graph_node.push(o_graph_node)
+        var a_o_graph_node__connected = f_a_o_graph_node__connected(o_graph_node);
+        if(a_o_graph_node__connected.length < 3){
+            for(var o_graph_node__connected of a_o_graph_node__connected){
+                f_a_o_graph_node__recursive_lt3(o_graph_node__connected, a_o_graph_node);
+            }
+        }
+    }
+
+}
+
+a_o_object_2d = a_o_object_2d.concat(a_o_object_2d__wall_and_path);
+
+for(let o_graph_node of a_o_graph_node){
+    console.log(o_graph_node.o_object_2d)
+    
+    let a_o_graph_node__connected_recursive_lt3 = [];
+    f_a_o_graph_node__recursive_lt3(
+        o_graph_node,
+        a_o_graph_node__connected_recursive_lt3
+    )
+    // console.log(a_o_graph_node__connected_recursive_lt3.length)
+    // console.log(a_o_graph_node__connected_recursive_lt3)
+
+    o_graph_node.a_o_graph_node__connected_recursive_lt3 = a_o_graph_node__connected_recursive_lt3
+    var s_color_rgba_randm = `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},1)`
+    for(let o_graph_node2 of o_graph_node.a_o_graph_node__connected_recursive_lt3){
+        o_graph_node2.o_object_2d.s_color_rgba = s_color_rgba_randm
+    }
+
+    o_graph_node.o_object_2d.f_render_function = function(){
+
+        if(!this.b_hover_mouse){
+            // this.s_color_rgba = "rgba(122,122,122,1)"
+        }else{
+            this.s_color_rgba = "rgba(122,0,122,1)"
+            console.log(o_graph_node.a_o_graph_node__connected_recursive_lt3)
+            for(var o_graph_node2 of o_graph_node.a_o_graph_node__connected_recursive_lt3){
+                o_graph_node2.o_object_2d.s_color_rgba = "rgba(0,255,0,1)"
+            }
+        }
+    }
+
+}
+
 f_render()
 // console.log(a_o_object_2d)
 var n_id_animation = window.requestAnimationFrame(f_render_recursive);
