@@ -52,11 +52,13 @@ var f_a_o_object_2d__wall_and_path = async function(){
                     var n_avg = n_sum / o_image_data.data.length;
                     // console.log(n_avg)
                     if(n_avg < 122){
+                        // var s_color_rgba = `rgba(${Math.random()*100},0,0,0.8)`
+                        var s_color_rgba = `rgba(122,0,0,0.8)`
                         a_o_object_2d.push(
                             new O_object_2d(
-                                n_scale_x, 
-                                n_scale_y, 
-                                'rgba(222,22,22,0.9)',
+                                n_scale_x,
+                                n_scale_y,
+                                s_color_rgba,
                                 function(){
                                     // this.n_x = this.n_x_initial + Math.random()
                                 },
@@ -68,7 +70,7 @@ var f_a_o_object_2d__wall_and_path = async function(){
                             new O_object_2d(
                                 n_scale_x, 
                                 n_scale_y, 
-                                'rgba(0,0,222,1)',
+                                'rgba(222,222,222,1)',
                                 function(){
                                     // this.n_x = this.n_x_initial + Math.random()
                                 },
