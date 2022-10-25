@@ -7,8 +7,9 @@
 //  // import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js'
 //  //production mode vue 
 //  import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.min.js'
-import {f_a_o_object_2d__wall} from  "./f_a_o_object_2d__wall.module.js";
+import {f_a_o_object_2d__wall_and_path} from  "./f_a_o_object_2d__wall_and_path.module.js";
 
+// import { f_find_path_demo } from "./f_find_path_demo.module.js";
 import {o_n_keycode} from "./o_n_keycode.module.js"
 
 document.body.style.margin = "0";
@@ -18,6 +19,15 @@ document.body.style.overflow = "hidden";
 var o_canvas = document.createElement("canvas");
 document.body.appendChild(o_canvas);
 
+// class O_game{
+//     constructor(
+//         n_scale_x, 
+//         n_scale_y, 
+//         a_o_object_2d,
+//     ){
+
+//     }
+// }
 class O_object_2d{
     constructor(
         n_x, 
@@ -94,6 +104,8 @@ var f_noise_demo = function(){
         n+=1;
     }
 }
+
+
 var f_player_demo = function(){
     var o_object_2d__player = new O_object_2d(
         parseInt(Math.random() * n_scale_x), 
@@ -175,6 +187,12 @@ var f_player_demo = function(){
 
     a_o_object_2d.push(o_object_2d__player);
 }
+
+var f_find_path_demo = function(){
+    
+}
+
+
 var n_ts_ms_now = window.performance.now();
 var n_ts_ms_last = window.performance.now();
 var n_ts_ms_delta = window.performance.now();
@@ -240,7 +258,8 @@ var f_render_recursive = function(){
 
 
 
-var a_o_object_2d__wall = await f_a_o_object_2d__wall()
+var a_o_object_2d__wall = await f_a_o_object_2d__wall_and_path()
+
 let n_index = 0
 for(var o_object_2d of a_o_object_2d__wall){
     n_index+=1//that wont work
@@ -264,8 +283,8 @@ a_o_object_2d = a_o_object_2d.concat(a_o_object_2d__wall);
 f_render()
 // console.log(a_o_object_2d)
 var n_id_animation = window.requestAnimationFrame(f_render_recursive);
-
+// f_find_path_demo();
 // f_noise_demo();
-f_player_demo();
+// f_player_demo();
 
 export {O_object_2d}
