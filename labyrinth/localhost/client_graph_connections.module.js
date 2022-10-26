@@ -8,7 +8,9 @@
 //  //production mode vue 
 //  import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.min.js'
 import {f_a_o_object_2d__wall_and_path} from  "./f_a_o_object_2d__wall_and_path.module.js";
+
 import { O_object_2d } from "./O_object_2d.module.js";
+
 // import { f_find_path_demo } from "./f_find_path_demo.module.js";
 import {o_n_keycode} from "./o_n_keycode.module.js"
 
@@ -56,6 +58,12 @@ class O_graph_node{
         this.o_graph_node__down = o_graph_node__down
     }
 }
+var n_scale_x = 32;
+var n_scale_y = 20;
+var n_scale_x_canvas = 400;
+var n_scale_y_canvas = 400;
+var n_scale_x_object = n_scale_x_canvas / n_scale_x;
+var n_scale_y_object = n_scale_y_canvas / n_scale_y;
 
 var f_render_function__random_color = function(){
     this.s_color_rgba = 
@@ -63,11 +71,10 @@ var f_render_function__random_color = function(){
 }
 var a_o_object_2d = [];
 
-var n_scale_x = 32;
-var n_scale_y = 20;
 
-o_canvas.width = n_scale_x;
-o_canvas.height = n_scale_y;
+
+o_canvas.width = n_scale_x_canvas;
+o_canvas.height = n_scale_y_canvas;
 
 o_canvas.style.width = "100%";
 o_canvas.style.height = "100%";
@@ -76,19 +83,7 @@ o_canvas.style.imageRendering = "pixelated";
 var o_ctx = o_canvas.getContext("2d");
 
 var n_keycode_max = 255;
-// the below would save some bits... but is unconvinient as hell
-// var a_n_keycode_keydown = Uint8Array(n_keycode_max/8);
-// window.onkeydown = function(){
-//     var n_index_byte = parseInt(window.event.keyCode / 8);
-//     var n_index_bit = window.event.keycode % 8;
-//     a_n_keycode_keydown[n_index_byte] = a_n_keycode_keydown[n_index_byte] | Math.pow(2, n_index_bit);
-// }
-// window.onkeyup = function(){
-//     var n_index_byte = parseInt(window.event.keyCode / 8);
-//     var n_index_bit = window.event.keycode % 8;
-//     var n_mask = 0 | Math.pow(2, n_index_bit);
-//     a_n_keycode_keydown[n_index_byte] = a_n_keycode_keydown[n_index_byte] & n_mask;
-// }
+
 
 var a_n_keycode_keydown = new Uint8Array(n_keycode_max);
 window.onkeydown = function(){
@@ -99,137 +94,6 @@ window.onkeyup = function(){
     a_n_keycode_keydown[window.event.keyCode] = 0;
 }
 
-var f_noise_demo = function(){
-    
-    var n = 0; 
-    while(n < n_scale_x * n_scale_y){
-        a_o_object_2d.push(
-            new O_object_2d(
-                n%n_scale_x, 
-                parseInt(n/n_scale_x), 
-                "rgba(122, 122, 0, 0.9)",
-                f_render_function__random_color,
-                "test"
-            )
-        )
-        n+=1;
-    }
-}
-
-var f_s_color_rgba_random = function(){
-    return `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},${Math.random()})`
-}
-var f_player_demo = function(){
-    var o_object_2d__player = new O_object_2d(
-        parseInt(Math.random() * n_scale_x), 
-        parseInt(Math.random() * n_scale_y),
-        "rgba(0,255,0,1)",
-        function(){
-            var n_x = this.n_x;
-            var n_y = this.n_y;
-            if(
-                a_n_keycode_keydown_game[o_n_keycode.arrow_left] == 1
-                &&
-                a_n_keycode_keydown_game_lastframe[o_n_keycode.arrow_left] == 0
-            ){
-                console.log('asdf')
-                var n_x = parseInt(this.n_x - 1)
-                var n_y = parseInt(this.n_y - 0)
-            }
-            if(
-                a_n_keycode_keydown_game[o_n_keycode.arrow_right] == 1
-                &&
-                a_n_keycode_keydown_game_lastframe[o_n_keycode.arrow_right] == 0
-            ){
-                var n_x = parseInt(this.n_x + 1)
-                var n_y = parseInt(this.n_y + 0)
-            }
-            if(
-                a_n_keycode_keydown_game[o_n_keycode.arrow_up] == 1
-                &&
-                a_n_keycode_keydown_game_lastframe[o_n_keycode.arrow_up] == 0
-            ){
-                var n_x = parseInt(this.n_x - 0)
-                var n_y = parseInt(this.n_y - 1)
-            }
-            if(
-                a_n_keycode_keydown_game[o_n_keycode.arrow_down] == 1
-                &&
-                a_n_keycode_keydown_game_lastframe[o_n_keycode.arrow_down] == 0
-            ){
-                var n_x = parseInt(this.n_x + 0)
-                var n_y = parseInt(this.n_y + 1)
-            }
-            if(
-                n_x != this.n_x
-                ||
-                n_y != this.n_y
-            ){
-
-                if(
-                    a_o_object_2d.filter(
-                        o=>
-                            parseInt(o.n_x) == n_x
-                            &&
-                            parseInt(o.n_y) == n_y                
-                        ).length == 0
-                ){
-                    this.n_x = n_x
-                    this.n_y = n_y
-                }
-                console.log(this.n_x_initial)
-            }
-
-            if(this.b_hover_mouse){
-                this.s_color_rgba = "rgba(255,255,0,1)"
-            }else{
-                this.s_color_rgba = "rgba(0,255,0,1)"
-            }
-            
-        }, 
-        "player"
-    )
-
-    while(
-        a_o_object_2d.filter(
-            o=>
-                parseInt(o.n_x) == parseInt(o_object_2d__player.n_x)
-                &&
-                parseInt(o.n_y) == parseInt(o_object_2d__player.n_y)                
-            ).length > 0
-        ){
-            o_object_2d__player.n_x = parseInt(Math.random() * n_scale_x)   
-            o_object_2d__player.n_y = parseInt(Math.random() * n_scale_y)   
-    }
-
-    a_o_object_2d.push(o_object_2d__player);
-}
-
-var f_player_fire_demo = function(){
-    let n_index = 0
-    for(var o_object_2d of a_o_object_2d){
-        if(
-            o_object_2d.s_name == "wall"
-        ){
-            n_index+=1//that wont work
-            o_object_2d.f_render_function = function(){
-                // this.s_color_rgba = `rgba(${Math.random()*255},0,0,1)` // random
-                // this.s_color_rgba = `rgba(${Math.sin(n_id_frame*0.01+this.n_x+this.n_y*0.1)*(255/2)+(255/2)},0,0,1)` // psychedelic
-                var o_object_2d__player = a_o_object_2d.filter(o=>o.s_name == "player")[0];
-                if(o_object_2d__player){
-                    var n_delta_x = this.n_x - o_object_2d__player.n_x;
-                    var n_delta_y = this.n_y - o_object_2d__player.n_y;
-                    var n_distance_to_player = Math.sqrt(n_delta_x**2 + n_delta_y**2);
-                    var n_distance_to_player_normalized = n_distance_to_player / 3;
-                    var n_u8_color_value = (255-n_distance_to_player_normalized*255) + Math.random()*40*n_distance_to_player_normalized
-                    this.s_color_rgba = `rgba(${n_u8_color_value},${Math.random()*n_u8_color_value*0.5},0,1)` // psychedelic
-                }
-    
-            }
-        }
-    }
-
-}
 
 var f_hover_demo = function(){
 
@@ -332,20 +196,32 @@ var f_render = function(){
     n_ts_ms_now = window.performance.now();
     n_ts_ms_delta = n_ts_ms_now - n_ts_ms_last;
 
-    var n_x_mouse_scale = parseInt(n_x_normalized_mouse * n_scale_x);
-    var n_y_mouse_scale = parseInt(n_y_normalized_mouse * n_scale_y);
+    var n_x_mouse_scale = parseInt(n_x_normalized_mouse * n_scale_x_canvas);
+    var n_y_mouse_scale = parseInt(n_y_normalized_mouse * n_scale_y_canvas);
 
     o_ctx.fillStyle = s_color_rgba__clear
-    o_ctx.fillRect(0,0,n_scale_x,n_scale_y);
+
+    o_ctx.fillRect(
+        0,
+        0,
+        n_scale_x_canvas,
+        n_scale_y_canvas
+    );
 
     let n_index_a_o_object_2d = 0;
     
     while(n_index_a_o_object_2d < a_o_object_2d.length){
         let o_object_2d = a_o_object_2d[n_index_a_o_object_2d];
+
+        var n_x_scaled__o_object_2d = o_object_2d.n_x * n_scale_x_object;
+        var n_y_scaled__o_object_2d = o_object_2d.n_y * n_scale_y_object;
+        var n_scale_x__o_object_2d = n_scale_x_object;
+        var n_scale_y__o_object_2d = n_scale_y_object;
+
         if(
-            n_x_mouse_scale == parseInt(o_object_2d.n_x)
+            n_x_mouse_scale == parseInt(n_x_scaled__o_object_2d)
             &&
-            n_y_mouse_scale == parseInt(o_object_2d.n_y)
+            n_y_mouse_scale == parseInt(n_y_scaled__o_object_2d)
             ){
                 o_object_2d.b_hover_mouse = true
         }else{
@@ -357,15 +233,32 @@ var f_render = function(){
         }
         o_ctx.fillStyle = o_object_2d.s_color_rgba
         o_ctx.fillRect(
-            o_object_2d.n_x,
-            o_object_2d.n_y,
-            1, 
-            1,
-        )
+            n_x_scaled__o_object_2d,
+            n_y_scaled__o_object_2d,
+            n_scale_x__o_object_2d,
+            n_scale_y__o_object_2d,
+        );
+        
+        for(var o_object_2d__line_to of o_object_2d.a_o_object_2d__line_to){
+            var n_x_scaled__o_object_2d__line_to = o_object_2d__line_to.n_x * n_scale_x_object;
+            var n_y_scaled__o_object_2d__line_to = o_object_2d__line_to.n_y * n_scale_y_object;
+            o_ctx.beginPath();
+            o_ctx.moveTo(
+                n_x_scaled__o_object_2d + (n_scale_x_object /2),
+                n_y_scaled__o_object_2d + (n_scale_y_object /2)
+            );
+            o_ctx.lineTo(
+                n_x_scaled__o_object_2d__line_to + (n_scale_x_object /2),
+                n_y_scaled__o_object_2d__line_to + (n_scale_y_object /2),
+            );
+            o_ctx.closePath()
+        }
+        o_ctx.strokeStyle = "white"
+        o_ctx.stroke();
+    
         // console.log(o_object_2d);
         n_index_a_o_object_2d+=1;
     }
-
 
 
     n_fps = 1000.0 / n_ts_ms_delta;
@@ -407,6 +300,7 @@ var a_s_side = [
     "down"
 ]
 for(var o_graph_node of a_o_graph_node){ 
+    
     for(var s_side of a_s_side){
         if(s_side == "left"){
             var n_x = o_graph_node.o_object_2d.n_x + -1;
@@ -432,6 +326,7 @@ for(var o_graph_node of a_o_graph_node){
         )[0]
         if(o_graph_node__connected){
             o_graph_node[`o_graph_node__${s_side}`] = o_graph_node__connected
+            o_graph_node.o_object_2d.a_o_object_2d__line_to.push(o_graph_node__connected.o_object_2d)
         }
     }
 }
@@ -617,11 +512,42 @@ var a_o_graph_node__path = f_a_o_graph_node__traversal_bfs(
 // let n_index = 0;
 for(var o_graph_node of a_o_graph_node__path){
     let n_index = a_o_graph_node__path.indexOf(o_graph_node)
+
+    o_graph_node.o_object_2d.n_x = parseInt(Math.random() * n_scale_x);
+    o_graph_node.o_object_2d.n_y = parseInt(Math.random() * n_scale_y);
+    while(true){
+        var a_o_graph_node__same_pos = a_o_graph_node.filter(
+            o=> 
+            parseInt(o_graph_node.o_object_2d.n_x) == parseInt(o.n_x)
+            &&
+            parseInt(o_graph_node.o_object_2d.n_y) == parseInt(o.n_y)
+        );
+        if(a_o_graph_node__same_pos.length < 2){
+            break;
+        }
+        o_graph_node.o_object_2d.n_x = parseInt(Math.random() * n_scale_x);
+        o_graph_node.o_object_2d.n_y = parseInt(Math.random() * n_scale_y);
+    }
     o_graph_node.o_object_2d.f_render_function  = function(){
         var n_max = 255;
         // this.s_color_rgba = `rgba(0,0,${(n_id_frame*0.2-(n_index*n_max/a_o_graph_node__path.length)) % 255}, 1)`
         this.s_color_rgba = `hsla(${(306/a_o_graph_node__path.length)*n_index-n_id_frame},50%,50%,1)`
         // this.s_color_rgba = f_s_color_rgba_random()
+    }
+}
+var n_index = 0;
+for(var o_object_2d of a_o_object_2d){
+    n_index +=1;
+    if(
+        o_object_2d.s_name == "wall"
+        // ||
+        // o_object_2d.s_name == "path"
+    ){
+        // console.log(a_o_object_2d.length)
+        o_object_2d.s_color_rgba = "rgba(0,0,0,0)";
+        a_o_object_2d.splice(n_index, 1)
+        // o_object_2d.b_render = false;
+        // console.log(a_o_object_2d.length)
     }
 }
 

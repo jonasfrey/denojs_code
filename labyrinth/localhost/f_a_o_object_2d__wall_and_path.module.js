@@ -1,4 +1,4 @@
-import {O_object_2d} from "./client.module.js";
+import {O_object_2d} from "./O_object_2d.module.js";
 
 var f_a_o_object_2d__wall_and_path = async function(){
 
