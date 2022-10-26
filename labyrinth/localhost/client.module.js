@@ -56,6 +56,30 @@ class O_graph_node{
         this.o_graph_node__down = o_graph_node__down
     }
 }
+class O_graph_edge_weighted{
+    constructor(
+        n_weight, 
+        o_graph_node__target
+    ){
+        this.n_weight = n_weight
+        this.o_graph_node__target = o_graph_node__target
+    }
+}
+class O_graph_node_weighted{
+    constructor(
+        o_object_2d, 
+        o_graph_edge_weighted__left,
+        o_graph_edge_weighted__right,
+        o_graph_edge_weighted__up,
+        o_graph_edge_weighted__down,
+    ){
+        this.o_object_2d = o_object_2d
+        this.o_graph_edge_weighted__left = o_graph_edge_weighted__left
+        this.o_graph_edge_weighted__right = o_graph_edge_weighted__right
+        this.o_graph_edge_weighted__up = o_graph_edge_weighted__up
+        this.o_graph_edge_weighted__down = o_graph_edge_weighted__down
+    }
+}
 
 var f_render_function__random_color = function(){
     this.s_color_rgba = 
