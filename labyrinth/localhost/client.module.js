@@ -1,14 +1,10 @@
-// import O_json_to_html from "https://unpkg.com/o_json_to_html@1.0.6/o_json_to_html.module.js"
 
-// // import { O_image } from "./O_image.module.js"
-// // import { O_image_mask }  from "./O_image_mask.module.js"
-
-//  //development mode vue
-//  // import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.js'
-//  //production mode vue 
-//  import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.esm.browser.min.js'
 import {f_a_o_object_2d__wall_and_path} from  "./f_a_o_object_2d__wall_and_path.module.js";
+
 import { O_object_2d } from "./O_object_2d.module.js";
+
+import {f_a_o_graph_node__traversal_dfs} from "./f_a_o_graph_node__traversal_dfs.module.js";
+
 // import { f_find_path_demo } from "./f_find_path_demo.module.js";
 import {o_n_keycode} from "./o_n_keycode.module.js"
 
@@ -16,7 +12,7 @@ document.body.style.margin = "0";
 document.body.style.padding = "0";
 document.body.style.overflow = "hidden";
 
-var o_canvas = document.createElement("canvas");
+var o_canvas = document.querySelector("canvas")
 var n_x_normalized_mouse = 0;
 var n_y_normalized_mouse = 0;
 o_canvas.onmousemove = function(){
@@ -29,8 +25,6 @@ o_canvas.onmousemove = function(){
     // const x = e.pageX - e.currentTarget.offsetLeft; 
     // const y = e.pageY - e.currentTarget.offsetTop; 
 }
-document.body.appendChild(o_canvas);
-
 // class O_game{
 //     constructor(
 //         n_scale_x, 
@@ -56,6 +50,7 @@ class O_graph_node{
         this.o_graph_node__down = o_graph_node__down
     }
 }
+
 class O_graph_edge_weighted{
     constructor(
         n_weight, 
@@ -121,6 +116,115 @@ window.onkeydown = function(){
 }
 window.onkeyup = function(){
     a_n_keycode_keydown[window.event.keyCode] = 0;
+}
+
+var f_animate = async function(
+    o_graph_node,
+    a_o_graph_node__stack_frontier,
+    a_o_graph_node__set_explored,
+    o_graph_node__target,
+    a_s_side
+){
+    var o_div_current = document.querySelector(".current .a_o");
+    var o_div_stack = document.querySelector(".stack .a_o");
+    var o_div_set = document.querySelector(".set .a_o");
+    
+    o_div_current.innerHTML = ""
+    o_div_stack.innerHTML = ""
+    o_div_set.innerHTML = ""
+    var o_div = document.createElement("div");
+    o_div.style.width = "15px";
+    o_div.style.height = "15px";
+    o_div.style.margin = "3px";
+    for(var o of a_o_graph_node__set_explored){
+        var s_color_rgba =  "rgba(255,0,255,1)";
+        o.o_object_2d.s_color_rgba = s_color_rgba;
+        o_div.style.backgroundColor = s_color_rgba;
+        o_div_set.appendChild(o_div.cloneNode());
+    }
+    for(var o of a_o_graph_node__stack_frontier){
+        var s_color_rgba =  "rgba(0,255,255,1)";
+        o.o_object_2d.s_color_rgba = s_color_rgba;
+        o_div.style.backgroundColor = s_color_rgba;
+        o_div_stack.appendChild(o_div.cloneNode());
+    }
+    var s_color_rgba =  "rgba(255,255,0,1)";
+    o_graph_node.o_object_2d.s_color_rgba = s_color_rgba
+    o_div.style.backgroundColor = s_color_rgba;
+    o_div_current.appendChild(o_div.cloneNode());
+
+    await new Promise(r => setTimeout(r, 666));
+    f_render();
+    
+}
+var f_traversal_dfs_recursive_animated = async function(
+    a_o_graph_node__stack_frontier,
+    a_o_graph_node__set_explored,
+    o_graph_node__target, 
+    a_s_side
+){
+
+    if(a_o_graph_node__stack_frontier.length == 0){
+        console.log("stack is empty, goal could not be reached or no start node was in the stack array :(")
+        return true
+    }
+    var o_graph_node = a_o_graph_node__stack_frontier.pop();
+    if(o_graph_node == o_graph_node__target){
+        console.log("target graph node has been found!")
+        return true
+    }
+    await f_animate(
+        o_graph_node,
+        a_o_graph_node__stack_frontier,
+        a_o_graph_node__set_explored,
+        o_graph_node__target, 
+        a_s_side
+    );
+
+    for(var s_side of a_s_side){
+        var o_graph_node__connected = o_graph_node[`o_graph_node__${s_side}`];
+        if(o_graph_node__connected != null){
+            if(a_o_graph_node__set_explored.indexOf(o_graph_node__connected) == -1){
+                a_o_graph_node__stack_frontier.push(o_graph_node__connected)
+                a_o_graph_node__set_explored.push(o_graph_node__connected)
+            }
+        }
+    }
+    await f_animate(
+        o_graph_node,
+        a_o_graph_node__stack_frontier,
+        a_o_graph_node__set_explored,
+        o_graph_node__target, 
+        a_s_side
+    );
+    f_traversal_dfs_recursive_animated(
+        a_o_graph_node__stack_frontier,
+        a_o_graph_node__set_explored,
+        o_graph_node__target,
+        a_s_side
+    )
+}
+
+var f_a_o_graph_node__traversal_dfs_animated = async function(
+    o_graph_node__start,
+    o_graph_node__target, 
+    a_s_side = [
+        "down", 
+        "up", 
+        "left", 
+        "right"
+    ]
+){
+    var a_o_graph_node__stack_frontier =[ o_graph_node__start ];
+    var a_o_graph_node__set_explored = [ o_graph_node__start ];
+    await f_traversal_dfs_recursive_animated(
+        a_o_graph_node__stack_frontier,
+        a_o_graph_node__set_explored,
+        o_graph_node__target, 
+        a_s_side
+    );
+
+    return a_o_graph_node__set_explored;
 }
 
 var f_noise_demo = function(){
@@ -524,74 +628,7 @@ var f_a_o_graph_node__traversal_bfs = function(
 
 
 
-var f_a_o_graph_node__traversal_dfs_recursive = function(
-    a_o_graph_node__stack_frontier,
-    a_o_graph_node__set_explored,
-    o_graph_node__target, 
-    a_s_side
-){
-    if(a_o_graph_node__stack_frontier.length == 0){
-        console.log("stack is empty, goal could not be reached or no start node was in the stack array :(")
-        return true
-    }
-    var o_graph_node = a_o_graph_node__stack_frontier.pop();
-    if(o_graph_node == o_graph_node__target){
-        console.log("target graph node has been found!")
-        // console.log(a_o_graph_node__set_explored)
-        return true
-    }
 
-    for(var s_side of a_s_side){
-        var o_graph_node__connected = o_graph_node[`o_graph_node__${s_side}`];
-        if(o_graph_node__connected != null){
-
-            // if(o_graph_node__connected == o_graph_node__target){
-            //     console.log("target graph node has been found!")
-            //     // console.log(a_o_graph_node__set_explored)
-            //     return true
-            // }
-
-            if(a_o_graph_node__set_explored.indexOf(o_graph_node__connected) != -1){
-                // do nothing 
-            }else{
-                o_graph_node__connected.n_ts_ms_pushed_to_explored = window.performance.now()
-                a_o_graph_node__stack_frontier.push(o_graph_node__connected)
-                a_o_graph_node__set_explored.push(o_graph_node__connected)
-            }
-        }
-    }
-    f_a_o_graph_node__traversal_dfs_recursive(
-        a_o_graph_node__stack_frontier,
-        a_o_graph_node__set_explored,
-        o_graph_node__target,
-        a_s_side
-    )
-}
-
-var f_a_o_graph_node__traversal_dfs = function(
-    o_graph_node__start,
-    o_graph_node__target, 
-    a_s_side = [
-        "down", 
-        "up", 
-        "left", 
-        "right"
-    ]
-){
-    var a_o_graph_node__stack_frontier =[ o_graph_node__start ];
-    var a_o_graph_node__set_explored = [ o_graph_node__start ];
-    f_a_o_graph_node__traversal_dfs_recursive(
-        a_o_graph_node__stack_frontier,
-        a_o_graph_node__set_explored,
-        o_graph_node__target, 
-        a_s_side
-    );
-
-    return a_o_graph_node__set_explored;
-}
-
-var o_graph_node__start = a_o_graph_node[0]
-var o_graph_node__target = a_o_graph_node[0]
 
 for(var o_graph_node of a_o_graph_node){
     var n_x = parseInt(o_graph_node.o_object_2d.n_x)
@@ -601,24 +638,71 @@ for(var o_graph_node of a_o_graph_node){
         && 
         n_y == 14
         ){
-            o_graph_node__start = o_graph_node
+            var o_graph_node__start = o_graph_node
     }
     if(
         n_x == 31
         && 
         n_y == 7
         ){
-            o_graph_node__target = o_graph_node
+            var o_graph_node__target = o_graph_node
     }
 }
-o_graph_node__start.o_object_2d.s_color_rgba = "rgba(33,255,0,1)"
-o_graph_node__target.o_object_2d.s_color_rgba = "rgba(255,33,0,1)"
+
+
 var a_s_side = [ // very efficient in this particular maze
     "down", 
     "up", 
     "left", 
     "right"
 ]
+const permutator = (inputArr) => {
+    let result = [];
+  
+    const permute = (arr, m = []) => {
+      if (arr.length === 0) {
+        result.push(m)
+      } else {
+        for (let i = 0; i < arr.length; i++) {
+          let curr = arr.slice();
+          let next = curr.splice(i, 1);
+          permute(curr.slice(), m.concat(next))
+       }
+     }
+   }
+  
+   permute(inputArr)
+  
+   return result;
+  }
+  
+
+
+
+console.log(permutator(a_s_side));
+// var a_o_graph_node__path = await f_a_o_graph_node__traversal_dfs_animated(
+var a_o_graph_node__path = f_a_o_graph_node__traversal_dfs(
+    o_graph_node__start, 
+    o_graph_node__target, 
+    a_s_side
+);
+window.setTimeout(function(){
+    var n_factor = 100;
+    var o_canvas2 = document.createElement("canvas");
+    o_ctx.scale(n_factor,n_factor);
+    var o_image_data = o_ctx.getImageData(0,0, o_canvas.width, o_canvas.height);
+    o_ctx.scale(1/n_factor,1/n_factor);
+
+    var o_ctx2 = o_canvas2.getContext("2d");
+    o_canvas2.width = o_canvas.width * n_factor;
+    o_canvas2.height = o_canvas.height * n_factor;
+    o_ctx2.putImageData(o_image_data, 0, 0);
+    o_ctx2.scale(o_canvas2.width/o_canvas.width, o_canvas2.height/o_canvas.height)
+    var image = o_canvas2.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+    window.location.href=image; // it will save locally
+
+},1000)
+
 a_s_side = [ //very ineficient in this particular maze!
     "right", 
     "up", 
@@ -631,24 +715,24 @@ a_s_side = [ //medium efficient in this particular maze!
     "down", 
     "up"
 ]
-var a_o_graph_node__path = f_a_o_graph_node__traversal_bfs(
-    o_graph_node__start, 
-    o_graph_node__target, 
-    a_s_side
-);
+
 
 // console.log(a_o_graph_node__path)
 // let n_index = 0;
-for(var o_graph_node of a_o_graph_node__path){
-    let n_index = a_o_graph_node__path.indexOf(o_graph_node)
-    o_graph_node.o_object_2d.f_render_function  = function(){
-        var n_max = 255;
-        // this.s_color_rgba = `rgba(0,0,${(n_id_frame*0.2-(n_index*n_max/a_o_graph_node__path.length)) % 255}, 1)`
-        this.s_color_rgba = `hsla(${(306/a_o_graph_node__path.length)*n_index-n_id_frame},50%,50%,1)`
-        // this.s_color_rgba = f_s_color_rgba_random()
-    }
-}
+// for(var o_graph_node of a_o_graph_node__path){
+//     let n_index = a_o_graph_node__path.indexOf(o_graph_node)
+//     o_graph_node.o_object_2d.f_render_function  = function(){
+//         var n_max = 255;
+//         // this.s_color_rgba = `rgba(0,0,${(n_id_frame*0.2-(n_index*n_max/a_o_graph_node__path.length)) % 255}, 1)`
+//         this.s_color_rgba = `hsla(${(306/a_o_graph_node__path.length)*n_index-n_id_frame},50%,50%,1)`
+//         // this.s_color_rgba = f_s_color_rgba_random()
+//     }
+// }
 
+o_graph_node__start.o_object_2d.f_render_function = function(){}
+o_graph_node__target.o_object_2d.f_render_function = function(){}
+o_graph_node__start.o_object_2d.s_color_rgba = "rgba(33,255,0,1)"
+o_graph_node__target.o_object_2d.s_color_rgba = "rgba(255,33,0,1)"
 // var f_graph_node_traversal_dfs_recursive = function(
 //     a_o_graph_node__stack,
 //     a_o_graph_node__set,

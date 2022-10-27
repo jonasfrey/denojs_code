@@ -13,14 +13,58 @@
         <!-- <meta name="viewport"  -->
         <!-- content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> -->
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+        <style>
+            *{
+                background: rgba(33,33,33,1);
+                color: rgba(222,222,222);
+            }
+            div#legend {
+                display: flex;
+                justify-content: space-around;
+                font-size: 2rem;
+                background: rgba(33,33,33,1);
+                color: rgba(222,222,222);
+                margin: 0;
+                padding: 0;
+            }
+            .stack, .current, .set{
+                flex:0 0 33%;
+            }
+
+            .a_o {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                font-family: monospace;
+            }
+        </style>
     </head>
     <body>
-        <div id="app">
-        </div>
+        <canvas></canvas>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <script type="module" src="./client.module.js" defer></script>
-        
+        <div id="legend">
+            <div class="current">
+                <span>Current</span>
+                <div class="a_o">
+                </div>
+            </div>
+            <div class="stack">
+                <span>Stack</span>
+                <div class="a_o">
+                </div>
+            </div>
+            <div class="set">
+                <span>Set</span>
+                <div class="a_o">
+                </div>
+            </div>
+        </div>
     </body>
 </html>
