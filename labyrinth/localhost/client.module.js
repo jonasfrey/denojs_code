@@ -3,7 +3,11 @@ import {f_a_o_object_2d__wall_and_path} from  "./f_a_o_object_2d__wall_and_path.
 
 import { O_object_2d } from "./O_object_2d.module.js";
 
-import {f_a_o_graph_node__traversal_dfs} from "./f_a_o_graph_node__traversal_dfs.module.js";
+import {
+    f_o_traversal_result__traversal_dfs,
+    O_traversal_result, 
+    f_a_o_graph_node__path
+} from "./f_o_traversal_result__traversal_dfs.module.js";
 
 // import { f_find_path_demo } from "./f_find_path_demo.module.js";
 import {o_n_keycode} from "./o_n_keycode.module.js"
@@ -123,6 +127,7 @@ window.onkeyup = function(){
     a_n_keycode_keydown[window.event.keyCode] = 0;
 }
 var o_div_order = document.querySelector(".order");
+var o_div_path = document.querySelector(".path .a_o");
 var o_div_controls = document.querySelector(".controls");
 var o_div_algorithm = document.querySelector(".algorithm");
 var o_div_speed = document.querySelector(".speed");
@@ -157,6 +162,7 @@ var f_update_dom2 = function(
 var b_restart = false;
 var n_timeout = null;
 var b_run_done = true;
+var o_div = document.createElement("div");
 
 var f_update_dom = async function(
     o_graph_node,
@@ -176,7 +182,6 @@ var f_update_dom = async function(
     o_graph_node__start.o_object_2d.s_color_rgba = "rgba(33,255,0,1)"
     o_graph_node__target.o_object_2d.s_color_rgba = "rgba(255,33,0,1)"
 
-    var o_div = document.createElement("div");
     o_div.style.width = "5px";
     o_div.style.height = "5px";
     o_div.style.margin = "1px";
@@ -206,13 +211,34 @@ var f_update_dom = async function(
     
 }
 
+var f_animate_backtracking = async function(
+    o_backtracking,
+    o_graph_node__target,
+    o_graph_node__start, 
+    n_sleep_ms
+){
+
+    o_graph_node = o_graph_node__target
+
+    while(o_graph_node != undefined){
+        var s_color_rgba =  "rgba(222,111,33,1)";
+        o_div.style.backgroundColor = s_color_rgba;
+        o_div_path.appendChild(o_div.cloneNode());
+        o_graph_node.o_object_2d.s_color_rgba = s_color_rgba;
+        f_render()
+        await new Promise(r => setTimeout(r, n_sleep_ms));
+        o_graph_node = o_backtracking[
+            `${o_graph_node.o_object_2d.n_x}|${o_graph_node.o_object_2d.n_y}`
+        ]
+    }
+}
 var f_traversal_recursive_animated = async function(
     a_o_graph_node__stack_frontier,
     a_o_graph_node__set_explored,
     o_graph_node__target,
     a_s_side, 
     s_algorithm,
-    o_shortest_path = {},
+    o_backtracking,
     n_sleep_ms
 ){
 
@@ -238,7 +264,13 @@ var f_traversal_recursive_animated = async function(
             o_graph_node__target, 
             a_s_side
         );
-        console.log("target graph node has been found!")
+        console.log("target graph node has been found!");
+        await f_animate_backtracking(
+            o_backtracking,
+            o_graph_node__target,
+            a_o_graph_node__set_explored[0], 
+            n_sleep_ms
+        );
         b_run_done = true;
         return true
     }
@@ -257,6 +289,9 @@ var f_traversal_recursive_animated = async function(
             if(a_o_graph_node__set_explored.indexOf(o_graph_node__connected) == -1){
                 a_o_graph_node__stack_frontier.push(o_graph_node__connected)
                 a_o_graph_node__set_explored.push(o_graph_node__connected)
+                o_backtracking[
+                    `${o_graph_node__connected.o_object_2d.n_x}|${o_graph_node__connected.o_object_2d.n_y}`
+                ] = o_graph_node
             }
         }
     }
@@ -274,21 +309,11 @@ var f_traversal_recursive_animated = async function(
         o_graph_node__target,
         a_s_side,
         s_algorithm,
-        o_shortest_path, 
+        o_backtracking, 
         n_sleep_ms
     )
 }
-class O_traversal_result{
-    constructor(
-        a_o_graph_node__stack_frontier,
-        a_o_graph_node__set_explored,
-        o_shortest_path
-    ){
-        this.a_o_graph_node__stack_frontier = a_o_graph_node__stack_frontier
-        this.a_o_graph_node__set_explored = a_o_graph_node__set_explored
-        this.o_shortest_path = o_shortest_path
-    }
-}
+
 var f_o_traversal_result__traversal_animated = async function(
     o_graph_node__start,
     o_graph_node__target, 
@@ -306,24 +331,28 @@ var f_o_traversal_result__traversal_animated = async function(
             o_object_2d.s_color_rgba = "rgba(222,222,222,1)"
         }
     }
-    var a_o_graph_node__stack_frontier =[ o_graph_node__start ];
+    var a_o_graph_node__stack_frontier = [ o_graph_node__start ];
     var a_o_graph_node__set_explored = [ o_graph_node__start ];
-    var o_shortest_path = {}
+    var o_backtracking = {}
     await f_traversal_recursive_animated(
         a_o_graph_node__stack_frontier,
         a_o_graph_node__set_explored,
         o_graph_node__target, 
         a_s_side, 
         s_algorithm, 
-        o_shortest_path,
+        o_backtracking,
         n_sleep_ms
     );
 
-    return Promise.resolve(new O_traversal_result(
-        a_o_graph_node__stack_frontier,
-        a_o_graph_node__set_explored,
-        o_shortest_path
-    ))
+    return Promise.resolve(
+        new O_traversal_result(
+            o_graph_node__start,
+            o_graph_node__target,
+            a_o_graph_node__stack_frontier,
+            a_o_graph_node__set_explored,
+            o_backtracking,
+        )
+    )
 }
 
 var f_noise_demo = function(){
@@ -835,7 +864,6 @@ window.onkeydown = async function(){
         if(b_run){
             b_run_done = false;
             var o_traversal_result = await f_o_traversal_result__traversal_animated(
-            // var a_o_graph_node__path = f_a_o_graph_node__traversal_dfs(
                 o_graph_node__start, 
                 o_graph_node__target, 
                 a_s_side, 
@@ -849,6 +877,34 @@ window.onkeydown = async function(){
 }
 
 
+
+// var f_do_it_not_animated = function(){
+
+//     var o_traversal_result = f_o_traversal_result__traversal_dfs(
+//         o_graph_node__start, 
+//         o_graph_node__target, 
+//         [
+//             "left",
+//             "right",
+//             "up", 
+//             "down"
+//         ]
+//     );
+//     console.log(o_traversal_result)
+    
+    
+//     var a_o_graph_node__path = f_a_o_graph_node__path(
+//         o_traversal_result.o_graph_node__target,
+//         o_traversal_result.o_backtracking,
+//     )
+//     for(var o_graph_node of a_o_graph_node__path){
+//         o_graph_node.o_object_2d.s_color_rgba = "rgba(255,0,0,1)";
+//     }
+//     f_render()
+    
+//     console.log(a_o_graph_node__path)
+// }
+// f_do_it_not_animated();
 
 
 // console.log(a_o_graph_node__path)
