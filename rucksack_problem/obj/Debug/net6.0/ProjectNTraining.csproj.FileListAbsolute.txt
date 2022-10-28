@@ -1,0 +1,75 @@
+C:\temp\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.exe
+C:\temp\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.deps.json
+C:\temp\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.runtimeconfig.json
+C:\temp\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.dll
+C:\temp\ProjectNTraining\bin\Debug\net6.0\ref\ProjectNTraining.dll
+C:\temp\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.pdb
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.AssemblyReference.cache
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.GeneratedMSBuildEditorConfig.editorconfig
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfoInputs.cache
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfo.cs
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.CoreCompileInputs.cache
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.dll
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ref\ProjectNTraining.dll
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.pdb
+C:\temp\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.genruntimeconfig.cache
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.exe
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.deps.json
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.runtimeconfig.json
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.dll
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.pdb
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.AssemblyReference.cache
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.GeneratedMSBuildEditorConfig.editorconfig
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfoInputs.cache
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfo.cs
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.CoreCompileInputs.cache
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.dll
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\refint\ProjectNTraining.dll
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.pdb
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.genruntimeconfig.cache
+C:\temp\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ref\ProjectNTraining.dll
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.exe
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.deps.json
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.runtimeconfig.json
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.dll
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ref\ProjectNTraining.dll
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.pdb
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.AssemblyReference.cache
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfoInputs.cache
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfo.cs
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.CoreCompileInputs.cache
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.dll
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ref\ProjectNTraining.dll
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.pdb
+C:\Users\BattlePumpkin\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.genruntimeconfig.cache
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.exe
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.deps.json
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.runtimeconfig.json
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.dll
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.pdb
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.AssemblyReference.cache
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfoInputs.cache
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfo.cs
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.CoreCompileInputs.cache
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.dll
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\refint\ProjectNTraining.dll
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.pdb
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.genruntimeconfig.cache
+C:\Users\battl\OneDrive - Berner Fachhochschule\ProjectNTraining_LATEST\ProjectNTraining\obj\Debug\net6.0\ref\ProjectNTraining.dll
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.exe
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.deps.json
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.runtimeconfig.json
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.dll
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\bin\Debug\net6.0\ProjectNTraining.pdb
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.AssemblyReference.cache
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.GeneratedMSBuildEditorConfig.editorconfig
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfoInputs.cache
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.AssemblyInfo.cs
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.csproj.CoreCompileInputs.cache
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.dll
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\refint\ProjectNTraining.dll
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.pdb
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ProjectNTraining.genruntimeconfig.cache
+C:\BFH\ProjectNTraining2\algo-data-aliaa1\ProjectNTraining\obj\Debug\net6.0\ref\ProjectNTraining.dll

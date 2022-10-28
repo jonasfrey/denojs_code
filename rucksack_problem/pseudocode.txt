@@ -1,0 +1,42 @@
+using System;
+
+namespace ProjectNTraining
+{
+    class Program
+    {
+        static int bckpckVol = 13;
+
+        static int [] itemVolume    = {5, 5, 6, 9, 6, 11, 12, 15, 17, 30};
+        static int [] itemValue     = {7, 7, 6, 5, 10, 5, 14, 17, 20 ,21};
+
+        static int[][] matrixTable;
+
+
+        static void Main(string[] args)
+        {
+            matrixTable = InitMatrixTable();
+
+            int res = Pack(bckpckVol, 0);
+            Console.WriteLine(res);
+        }
+
+        static int Pack(int restVol, int i)
+        {
+            if(i < itemVolume.Length)
+                //negative tree
+                int unpacked = Pack(restVol, i + 1);
+
+                //positive tree
+                int packed = 0;
+                if (restVol - itemVolume[i] >= 0) {
+                    packed = itemValue[i] + Pack(restVol - itemVolume[i], i+1);
+                }
+
+                if (unpacked > packed) 
+                    return unpacked;
+                else 
+                    return packed;
+            return 0;
+        }
+    }
+}
