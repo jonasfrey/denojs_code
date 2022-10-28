@@ -833,24 +833,26 @@ o_div_controls.innerHTML = s_controls.split("\n").join("<br>")
 var n_speed_max = 100;
 var n_i = 0;
 var a_n_speed = [1,10,50,100,500,1000]
-var n_index_a_n_speed = a_n_speed.length-1
+var n_index_a_n_speed = 2
 var n_speed = a_n_speed[n_index_a_n_speed]
+var a_s_side = a_a_s_side[n_index_a_a_s_side]
+
 window.onkeydown = async function(){
     
     if(b_run_done){
-        var a_s_side = a_a_s_side[n_index_a_a_s_side]
         var b_run = false;
         if(window.event.keyCode == o_n_keycode.s){
-            n_speed = a_n_speed[n_index_a_n_speed];
             n_index_a_n_speed=(n_index_a_n_speed+1)%a_n_speed.length;
+            n_speed = a_n_speed[n_index_a_n_speed];
         }
         if(window.event.keyCode == o_n_keycode.a){
-            s_algorithm = a_s_algorithm[n_index_a_s_algorithm];
             n_index_a_s_algorithm=(n_index_a_s_algorithm+1)%a_s_algorithm.length;
+            s_algorithm = a_s_algorithm[n_index_a_s_algorithm];
         }
         if(window.event.keyCode == o_n_keycode.o){
-            a_s_side = a_a_s_side[n_index_a_a_s_side];
             n_index_a_a_s_side=(n_index_a_a_s_side+1)%a_a_s_side.length;
+            a_s_side = a_a_s_side[n_index_a_a_s_side];
+            console.log(a_s_side)
         }
         if(window.event.keyCode == o_n_keycode.r){
             b_run = true
