@@ -29,38 +29,62 @@ var a_o_object = [
     new O_object(2, 2),
 ]
 
-//calculate the n_profitability_index
-var a_o_object__sorted_descending_by_n_profitability_index = a_o_object.sort(
-    function(o1,o2){
-        return o1.n_profitability_index < o2.n_profitability_index
-    }
-)
-console.log(a_o_object__sorted_descending_by_n_profitability_index)
 
+var f_o_backpack_with_most_profit = function(
+    a_o_object, 
+    n_capacity
+){
 
-var o_backpack = new O_backpack(
-    []
-    , 16
-)
-
-var n_weight_sum = 0;
-var b_done = false;
-while(!b_done){
-    var n_weight_backpack = o_backpack.a_o_object.reduce(((n,o)=>n+o.n_weight),0);
-    var n_weight_available = o_backpack.n_capacity - n_weight_backpack;
-    for(var o_object of a_o_object__sorted_descending_by_n_profitability_index){
-
-        while(o_object.n_weight < n_weight_available){
-            o_backpack.a_o_object.push(
-                o_object
-            )
-            var n_weight_backpack = o_backpack.a_o_object.reduce(((n,o)=>n+o.n_weight),0);
-            var n_weight_available = o_backpack.n_capacity - n_weight_backpack;
-
+    var a_o_object__sorted_descending_by_n_profitability_index = a_o_object.sort(
+        function(o1,o2){
+            return o1.n_profitability_index < o2.n_profitability_index
         }
+    )
+    console.log(a_o_object__sorted_descending_by_n_profitability_index)
+
+
+    var o_backpack = new O_backpack(
+        [],
+        n_capacity
+    )
+    
+    var b_done = false;
+    while(!b_done){
+        var n_weight_backpack = o_backpack.a_o_object.reduce(((n,o)=>n+o.n_weight),0);
+        var n_weight_available = o_backpack.n_capacity - n_weight_backpack;
+        for(var o_object of a_o_object__sorted_descending_by_n_profitability_index){
+    
+            while(o_object.n_weight < n_weight_available){
+                o_backpack.a_o_object.push(
+                    o_object
+                )
+                var n_weight_backpack = o_backpack.a_o_object.reduce(((n,o)=>n+o.n_weight),0);
+                var n_weight_available = o_backpack.n_capacity - n_weight_backpack;
+    
+            }
+        }
+        b_done = true;
     }
-    b_done = true;
+    return o_backpack
+    
 }
 
+var o_backpack = f_o_backpack_with_most_profit(a_o_object, 20);
+var n_sum_profit = o_backpack.a_o_object.reduce(((n,o)=>n+o.n_profit),0);
 
+console.log("o_backpack")
 console.log(o_backpack)
+
+console.log("n_sum_profit")
+console.log(n_sum_profit)
+
+
+
+var o_backpack = f_o_backpack_with_most_profit(a_o_object, 33);
+var n_sum_profit = o_backpack.a_o_object.reduce(((n,o)=>n+o.n_profit),0);
+
+console.log("o_backpack")
+console.log(o_backpack)
+
+console.log("n_sum_profit")
+console.log(n_sum_profit)
