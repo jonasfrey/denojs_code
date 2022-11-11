@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Draw a rectangle</title>
+</head>
+
+<body >
+    <canvas id="canvas" width="640" height="480"></canvas>
+</body>
+
+<script id="shaderVs" type="x-shader/x-vertex">
+
+
+
+    
+    attribute vec4 a_Position;
+    uniform float time;
+    void main() {
+        float f = mod(time,10.0); 
+        gl_Position[0] = a_Position[0]+(f/10.0);
+        gl_Position[0] = a_Position[0];
+        gl_Position[1] = a_Position[1];
+        gl_Position[2] = a_Position[2];
+        gl_Position[3] = a_Position[3];
+    }
+</script>
+
+<script id="shaderFs" type="x-shader/x-fragment">
+    precision mediump float;
+    uniform vec4 a_time;
+    uniform vec4 u_FragColor;
+    
+    float f_n_numberafterdecimalpoint(float n){
+        return mod(n , float(int(n)));
+    }
+
+    float f_n_pseudo_rand (vec2 a_n){
+        return mod(fract(sin(a_n[0]*a_n[1])*sin((a_n[0]/2.0)*a_n[1]*32222.0)*224452.0),1.0);
+    }
+
+    float f_n_random() {
+        float n_time =mod(a_time[0],100.0)/100.0;
+        return mod(4000.*sin(23464.345*n_time+45.345),1.0);
+    }
+
+    float random (vec2 st) {
+        return fract(sin(dot(st.xy,
+                             vec2(12.9898,78.233)))*
+            43758.5453123);
+    }
+    
+    void main() {
+        float n_pseudo_rand1 = random(vec2(a_time[0], a_time[0]*2.0));
+        float n_pseudo_rand2 = random(vec2(n_pseudo_rand1, n_pseudo_rand1*1.5));
+        float n_pseudo_rand3 = random(vec2(n_pseudo_rand2, n_pseudo_rand2*2.0));
+        gl_FragColor[0] = n_pseudo_rand1;
+        gl_FragColor[1] = n_pseudo_rand2;
+        gl_FragColor[2] = n_pseudo_rand3;
+        gl_FragColor[3] = 1.0;
+    }
+
+
+</script>
+
+<script>
+ /*============== Creating a canvas ====================*/
+ var canvas = document.getElementById('canvas');
+         gl = canvas.getContext('experimental-webgl');
+      
+         /*======== Defining and storing the geometry ===========*/
+
+         var vertices = [
+            -0.5,0.5,0.0,
+            -0.5,-0.5,0.0,
+            0.5,-0.5,0.0, 
+         ];
+         var a_n__xyz = []
+         var a_n__index = []
+         for(var n_i = 0; n_i<100; n_i+=1){
+            a_n__xyz.push(
+                Math.random() * 2 - 1,
+                Math.random() * 2 - 1,
+                Math.random() * 2 - 1,
+            )
+            a_n__index.push(n_i)
+         }
+         indices = [0,1,2];
+         
+         // Create an empty buffer object to store vertex buffer
+         var vertex_buffer = gl.createBuffer();
+
+         // Bind appropriate array buffer to it
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+         
+         // Pass the vertex data to the buffer
+         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(a_n__xyz), gl.STATIC_DRAW);
+
+         // Unbind the buffer
+         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+         // Create an empty buffer object to store Index buffer
+         var Index_Buffer = gl.createBuffer();
+
+         // Bind appropriate array buffer to it
+         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
+
+         // Pass the vertex data to the buffer
+         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(a_n__index), gl.STATIC_DRAW);
+         
+         // Unbind the buffer
+         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+         /*================ Shaders ====================*/
+         
+         // Vertex shader source code
+         var vertCode =
+            `
+            varying vec3 vPos;
+            attribute vec3 coordinates;
+            void main(void) {
+                vPos = coordinates;
+                gl_Position = vec4(coordinates, 1.0);
+            }`;
+            
+         // Create a vertex shader object
+         var vertShader = gl.createShader(gl.VERTEX_SHADER);
+
+         // Attach vertex shader source code
+         gl.shaderSource(vertShader, vertCode);
+
+         // Compile the vertex shader
+         gl.compileShader(vertShader);
+
+         //fragment shader source code
+         var fragCode =
+            `
+            precision mediump float;
+            varying lowp vec4 vColor;
+            varying vec3 vPos;
+
+            float f_n_random (vec2 st) {
+                return fract(sin(dot(st.xy,
+                                    vec2(12.9898,78.233)))*
+                    43758.5453123);
+            }
+            uniform vec2 u_resolution;
+            void main(void) {
+                // float n_x_gl_frag_coord_normalized = gl_FragCoord.x / u_resolution.x;
+                float n_x_gl_frag_coord_normalized = gl_FragCoord.x / 640.0;
+                float n_pos = vPos[1];
+                // float n_rand = f_n_random(vec2(vPos[0],vPos[1]));
+                gl_FragColor = vec4(vec3(n_pos), 1.0);
+            }`;
+            
+        fragCode = `
+        precision mediump float;
+
+        uniform vec4 u_color;
+
+        void main() {
+        gl_FragColor = u_color;
+        }
+        `
+
+
+         // Create fragment shader object
+         var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+
+         // Attach fragment shader source code
+         gl.shaderSource(fragShader, fragCode); 
+         
+         // Compile the fragmentt shader
+         gl.compileShader(fragShader);
+
+         // Create a shader program object to store
+         // the combined shader program
+         var shaderProgram = gl.createProgram();
+
+   // Set a random color.
+         // Attach a vertex shader
+         gl.attachShader(shaderProgram, vertShader);
+
+         // Attach a fragment shader
+         gl.attachShader(shaderProgram, fragShader);
+
+         // Link both the programs
+         gl.linkProgram(shaderProgram);
+
+         // Use the combined shader program object
+         gl.useProgram(shaderProgram);
+
+         var colorUniformLocation = gl.getUniformLocation(shaderProgram, "u_color");
+
+
+    gl.uniform4f(colorUniformLocation, Math.random(), Math.random(), Math.random(), 1);
+
+
+         /*======= Associating shaders to buffer objects =======*/
+
+         // Bind vertex buffer object
+         gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+
+         // Bind index buffer object
+         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
+         
+         // Get the attribute location
+         var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+
+         // Point an attribute to the currently bound VBO
+         gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0); 
+         
+         // Enable the attribute
+         gl.enableVertexAttribArray(coord);
+
+         /*=========Drawing the triangle===========*/
+
+         // Clear the canvas
+         gl.clearColor(0.5, 0.5, 0.5, 0.9);
+
+         // Enable the depth test
+         gl.enable(gl.DEPTH_TEST);
+
+         // Clear the color buffer bit
+         gl.clear(gl.COLOR_BUFFER_BIT);
+
+         // Set the view port
+         gl.viewport(0,0,canvas.width,canvas.height);
+
+         // Draw the triangle
+         gl.drawElements(gl.TRIANGLES, 3, gl.UNSIGNED_SHORT,0);
+         gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT,3);
+
+</script>
+
+</html>
