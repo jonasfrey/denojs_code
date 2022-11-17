@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <canvas></canvas>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script >
+            var a_o = []
+
+            // javascritp can only do bitshifting operations with up to 32 bits
+            var n_bits_max = 32;
+
+            var o_canvas = document.querySelector("canvas");
+            var o_ctx = o_canvas.getContext('2d');
+            o_img = new Image();
+            o_img.src = './font_5.png';
+            console.log("test"); 
+            a_n_u32 = []
+            o_img.onload = function(){
+                o_canvas.width = this.width;
+                o_canvas.height = this.height;
+                o_ctx.drawImage(o_img, 0, 0);
+
+                var n_x_scale_img = this.width; 
+                var n_y_scale_img = this.height;
+                var n_x_chars_img = 16;
+                var n_y_chars_img = 8;
+                var n_x_scale_char = n_x_scale_img/n_x_chars_img; 
+                var n_y_scale_char = n_y_scale_img/n_y_chars_img;
+                var n_x_pixels_per_char = 8;
+                var n_y_pixels_per_char = 8;
+                var n_x_scale_pixel = n_x_scale_char / n_x_pixels_per_char;
+                var n_y_scale_pixel = n_y_scale_char / n_y_pixels_per_char;
+
+                for(var n_y_char = 0; n_y_char < n_y_chars_img; n_y_char+=1){
+                    for(var n_x_char = 0; n_x_char < n_x_chars_img; n_x_char+=1){
+
+                        var n_x_translation_char = n_x_char * n_x_scale_char;
+                        var n_y_translation_char = n_y_char * n_y_scale_char;
+                        
+
+                        for(var n_y_pixel = 0; n_y_pixel < n_y_pixels_per_char; n_y_pixel+=1){
+                            for(var n_x_pixel = 0; n_x_pixel < n_x_pixels_per_char; n_x_pixel+=1){
+
+                                var n_x_translation_char_pixel = n_x_pixel * n_x_scale_pixel + n_x_translation_char;
+                                var n_y_translation_char_pixel = n_y_pixel * n_y_scale_pixel + n_y_translation_char;
+
+                                o_ctx.beginPath();
+                                // o_ctx.strokeStyle = `rgba(${Math.random()},${Math.random()},${Math.random()},1.0)`;
+                                o_ctx.strokeStyle = 'red'
+                                o_ctx.rect(
+                                    n_x_translation_char_pixel, 
+                                    n_y_translation_char_pixel,
+                                    n_x_scale_pixel, 
+                                    n_x_scale_pixel
+                                    );
+                                const o_image_data = o_ctx.getImageData(
+                                    n_x_translation_char_pixel, 
+                                    n_y_translation_char_pixel,
+                                    n_x_scale_pixel, 
+                                    n_x_scale_pixel
+                                );
+                                var n_index_pixel = (n_y_pixel * n_x_scale_pixel) +(n_x_pixel);
+                                if(n_index_pixel % n_bits_max == 0){
+                                    a_n_u32.push(0);
+                                }
+                                var n_index_pixel_modulo = n_index_pixel % n_bits_max;
+                                // console.log(n_index_pixel);
+                                
+                                var n_sum = o_image_data.data.reduce((n_acc, n)=>n_acc+n,0);
+                                var n_channels = 4;
+                                var n_avg = n_sum / (o_image_data.width * o_image_data.height * n_channels);
+                                // console.log(n_avg);
+                                var n_avg_normlzd = n_avg / 255.0;
+
+                                if(n_avg_normlzd > 0.5){
+
+                                    a_n_u32[a_n_u32.length-1]  = a_n_u32[a_n_u32.length-1] | (1 << n_index_pixel_modulo);
+
+                                    o_ctx.fillStyle = "rgba(255,0,0,0.9)"
+
+                                    a_o.push(
+                                    {
+                                        n_x_translation_char_pixel: n_x_translation_char_pixel, 
+                                        n_y_translation_char_pixel: n_y_translation_char_pixel,
+                                        n_x_scale_pixel: n_x_scale_pixel, 
+                                        n_x_scale_pixel: n_x_scale_pixel
+                                    }
+                                )
+                                }
+                                else{
+                                    o_ctx.fillStyle = "rgba(0,0,0,0.9)"
+                                }
+
+                                o_ctx.fillRect(
+                                        n_x_translation_char_pixel, 
+                                        n_y_translation_char_pixel,
+                                        n_x_scale_pixel, 
+                                        n_x_scale_pixel
+                                );
+                                
+                            }
+                        }
+
+                    }
+                }
+
+                console.log(a_n_u32)
+                console.log(JSON.stringify(a_n_u32));
+
+                var n_count = 0;
+                for(var n of a_n_u32){
+                    if(n_count % 2 == 0){
+                        console.log("---")
+                    }
+                    var s = f_s_dec_to_bin(n).padStart(32, '0');
+                    var a_s = s.match(/.{1,8}/g)
+                    for(var s of a_s){
+                        console.log(s)
+                    }
+                    n_count+=1;
+
+                }
+
+
+            }
+
+            var f_s_dec_to_bin = function(n_dec){
+                return (n_dec >>> 0).toString(2);
+            }
+
+            var n_frame_id = 0; 
+            var f_render = function(){
+                for(var o of a_o){
+                    o_ctx.fillStyle = `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255}, 1.0)`;
+                    o_ctx.fillRect(
+                            o.n_x_translation_char_pixel, 
+                            o.n_y_translation_char_pixel,
+                            o.n_x_scale_pixel, 
+                            o.n_x_scale_pixel
+                    );
+                    // console.log(o)
+                }
+                n_frame_id = window.requestAnimationFrame(f_render);
+            }
+            n_frame_id = window.requestAnimationFrame(f_render);
+
+        </script>
+    </body>
+</html>
