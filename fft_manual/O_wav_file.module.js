@@ -60,7 +60,7 @@ class O_byte_offset_property{
             a_n_u8 = a_n_u8.subarray(0, n_byte_length);
             var n_i = 0; 
             while(n_i < n_byte_length){
-                this.o_dataview_a_nu8.setUint8(((this.b_big_endian) ? (n_byte_length-1)-n_i : n_i), a_n_u8[n_i], !this.b_big_endian);
+                this.o_dataview_a_nu8.setUint8(((!this.b_big_endian) ? (n_byte_length-1)-n_i : n_i), a_n_u8[n_i], !this.b_big_endian);
                 n_i+=1;
             }
 
@@ -167,32 +167,29 @@ class O_wav_file{
     }
     async f_create_from_array(
         n_number_of_channels,
-        n_samples_per_second,
+        n_bits_per_sample, 
+        n_samples_per_second_per_channel,
         a_n__data
     ){
-        //
+        
         var n_bits_per_sample = a_n__data.BYTES_PER_ELEMENT*8;
-
         var o_file_header = this.f_o_file_header();
         var a_n_u8__header = o_file_header.f_a_n_u8();
-        o_file_header.n_channels = n_number_of_channels;
-        o_file_header.n_samples_per_second = n_samples_per_second;
+        o_file_header.n_number_of_channels = n_number_of_channels;
         o_file_header.n_bits_per_sample = n_bits_per_sample;
-        o_file_header.n_sample_rate_times_bits_per_sample_time_channel_dividedby8 = (o_file_header.n_samples_per_second * n_bits_per_sample * n_number_of_channels) /8; 
-        console.log(a_n_u8__header)
-        console.log(a_n_u8__header)
-        console.log(a_n_u8__header)
-        var a_n_u8__data = new Uint8Array(a_n__data);
-        var a_n_u8__header_and_data = new Uint8Array(a_n_u8__header.length + a_n__data.length);
+        o_file_header.n_samples_per_second_per_channel = n_samples_per_second_per_channel;
+        o_file_header.n_bits_per_sample_times_channels = n_bits_per_sample * n_number_of_channels;
+        o_file_header.n_samples_per_second_per_channel_times_bits_per_sample_times_channel__dividedby8 =
+            (n_samples_per_second_per_channel * n_bits_per_sample * n_number_of_channels) /8; 
         
+        var a_n_u8__data = new Uint8Array(a_n__data.buffer);
+        var a_n_u8__header_and_data = new Uint8Array(a_n_u8__header.length + a_n_u8__data.length);
         a_n_u8__header_and_data.set(a_n_u8__header);
         a_n_u8__header_and_data.set(a_n_u8__data, a_n_u8__header.length);
-        o_file_header.n_file_size = a_n_u8__data.length;
+        o_file_header.n_data_size_in_bytes = a_n_u8__data.length;
         o_file_header.n_file_size_in_bytes_minus_8_bytes = a_n_u8__header_and_data.length-8;
-
-
+        console.log(o_file_header)
         this.a_n_u8 = a_n_u8__header_and_data;
-
     
     }
 
@@ -210,12 +207,12 @@ class O_wav_file{
         var o_file_header = new O_file_header(
             [
                 new O_byte_offset_property(
-                    's_riff_mark_ascii_chars',
+                    's_riff_mark',
                     4 * 8,
                     'string', 
                     false,
                     "RIFF",
-                    false, 
+                    true, 
                     null
                 ), 
                 new O_byte_offset_property(
@@ -228,25 +225,25 @@ class O_wav_file{
                     null
                 ), 
                 new O_byte_offset_property(
-                    's_wave_mark_file_type_header',
+                    's_wave_mark',
                     4 * 8,
                     'string',
                     false,
                     "WAVE",
-                    false, 
+                    true, 
                     null
                 ), 
                 new O_byte_offset_property(
-                    's_fmt_mark_header',
+                    's_fmt_mark',
                     4 * 8,
                     'string',
                     false,
                     "fmt ",
-                    false, 
+                    true, 
                     null 
                 ), 
                 new O_byte_offset_property(
-                    'n_subchunk_1_size',
+                    'n_fmt_chunk_size',
                     4 * 8,
                     'integer',
                     false,
@@ -255,7 +252,7 @@ class O_wav_file{
                     null
                 ), 
                 new O_byte_offset_property(
-                    'n_type_of_format_1_is_pcm',
+                    'n_compression_code',
                     2 * 8,
                     'integer',
                     false,
@@ -273,7 +270,7 @@ class O_wav_file{
                     null
                 ),
                 new O_byte_offset_property(
-                    'n_samples_per_second',
+                    'n_samples_per_second_per_channel',
                     4 * 8,
                     'integer',
                     false,
@@ -282,7 +279,7 @@ class O_wav_file{
                     null
                 ),
                 new O_byte_offset_property(
-                    'n_sample_rate_times_bits_per_sample_time_channel_dividedby8',
+                    'n_samples_per_second_per_channel_times_bits_per_sample_times_channel__dividedby8',
                     4 * 8,
                     'integer',
                     false,
@@ -309,16 +306,16 @@ class O_wav_file{
                     null
                 ),
                 new O_byte_offset_property(
-                    's_data_mark_chunk_header',
+                    's_data_mark',
                     4 * 8,
                     'string',
                     false,
                     "data",
-                    false, 
+                    true, 
                     null
                 ),
                 new O_byte_offset_property(
-                    'n_file_size',
+                    'n_data_size_in_bytes',
                     4 * 8,
                     'integer',
                     false,
