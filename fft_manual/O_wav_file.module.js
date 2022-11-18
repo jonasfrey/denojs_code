@@ -166,7 +166,7 @@ class O_wav_file{
         }
     }
     async f_create_from_array(
-        n_number_of_channels,
+        n_channels,
         n_bits_per_sample, 
         n_samples_per_second_per_channel,
         a_n__data
@@ -175,12 +175,12 @@ class O_wav_file{
         var n_bits_per_sample = a_n__data.BYTES_PER_ELEMENT*8;
         var o_file_header = this.f_o_file_header();
         var a_n_u8__header = o_file_header.f_a_n_u8();
-        o_file_header.n_number_of_channels = n_number_of_channels;
+        o_file_header.n_channels = n_channels;
         o_file_header.n_bits_per_sample = n_bits_per_sample;
         o_file_header.n_samples_per_second_per_channel = n_samples_per_second_per_channel;
-        o_file_header.n_bits_per_sample_times_channels = n_bits_per_sample * n_number_of_channels;
+        o_file_header.n_bits_per_sample_times_channels = n_bits_per_sample * n_channels;
         o_file_header.n_samples_per_second_per_channel_times_bits_per_sample_times_channel__dividedby8 =
-            (n_samples_per_second_per_channel * n_bits_per_sample * n_number_of_channels) /8; 
+            (n_samples_per_second_per_channel * n_bits_per_sample * n_channels) /8; 
         
         var a_n_u8__data = new Uint8Array(a_n__data.buffer);
         var a_n_u8__header_and_data = new Uint8Array(a_n_u8__header.length + a_n_u8__data.length);
@@ -261,7 +261,7 @@ class O_wav_file{
                     null
                 ),
                 new O_byte_offset_property(
-                    'n_number_of_channels',
+                    'n_channels',
                     2 * 8,
                     'integer',
                     false,

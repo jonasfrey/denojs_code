@@ -20,6 +20,14 @@ class O_backpack{
         this.n_capacity = n_capacity
     }
 }
+
+// 𝑢1 = 6,
+// 𝑢2 = 3,
+// 𝑢3 = 5,
+// 𝑢4 = 4,
+// 𝑢5 = 5,
+// 𝑢6 = 2
+
 var a_o_object = [
     new O_object(6, 2),
     new O_object(3, 3),
@@ -77,7 +85,6 @@ console.log(o_backpack)
 
 console.log("n_sum_profit")
 console.log(n_sum_profit)
-
 
 
 var o_backpack = f_o_backpack_with_most_profit(a_o_object, 33);
