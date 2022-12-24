@@ -1,0 +1,38 @@
+<style>
+  *{
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    color: #eee;
+  }
+  canvas{
+    width:100vh; /*done on purpose so the ratio is 1:1*/
+    height: 100vh;
+  }
+  .o_div{
+    position: absolute;
+    top:0;
+    left:0;
+  }
+  .o_editor{
+    /* width: 100vw; */
+    /* height: 100vh; */
+    /* opacity: 0.5; */
+  }
+  .o_canvas, .o_editor{
+    height: 100vh;
+    /* position: absolute; */
+    /* display: flex; */
+    /* top:0; */
+    /* left:0; */
+  }
+  select{
+    position: absolute;
+    top:0;
+    right:0;
+    z-index: 1;
+  }
+</style>
+<script src="monaco_editor_loader.min.js"></script>
+<canvas id="canvas"></canvas>
+<script src="index.js" type="module"></script>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>asdf</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script>
+
+
+(function(){
+    var s_class_for_selector = "input_type_tag_5ff8be1d-37bc-4e4e-abca-3c0707082cc0"
+    var n_key_code_comma = 188;
+    var n_key_code_enter = 13;
+  
+  var f_update_s_json__a_s = function(o_element, a_s){
+    o_element.setAttribute("s_json__a_s", JSON.stringify(a_s))
+    var s_data_element_id_to_set_s_json__a_s_as_value = o_element.getAttribute('data-element-id-to-set-s_json__a_s-as-value');
+    if(s_data_element_id_to_set_s_json__a_s_as_value){
+      //console.log(document.getElementById(s_data_element_id_to_set_s_json__a_s_as_value))
+      var o_el = document.getElementById(s_data_element_id_to_set_s_json__a_s_as_value);
+      
+      var b_value_changed = o_el.value != JSON.stringify(a_s);
+      o_el.value = JSON.stringify(a_s);
+      o_el.setAttribute("value",JSON.stringify(a_s));
+      if(b_value_changed){
+        //trigger onchange 
+        if ("createEvent" in document) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("change", false, true);
+            o_el.dispatchEvent(evt);
+        }else{
+            o_el.fireEvent("onchange");
+        }
+      }
+  
+    }
+    f_render_s_json__a_s(o_element)
+  } 
+  var f_a_s = function(o_element, s_attribute_name = "s_json__a_s"){
+    var s_json__a_s = o_element.getAttribute(s_attribute_name);
+    try{
+      var a_s = JSON.parse(s_json__a_s);
+    }catch(e){}
+    if(!a_s){
+      a_s = []
+    }
+    return a_s
+  }
+  var f_delete_s_from_s_json__a_s = function(o_element, s){
+    var a_s = f_a_s(o_element);
+    var n_index = a_s.indexOf(s)
+    if(n_index != -1){
+      a_s.splice(n_index, 1); 
+    }
+    f_update_s_json__a_s(o_element, a_s)
+  
+    
+  }
+  var f_render_s_json__a_s = function(o_element){
+      var a_s = f_a_s(o_element);
+  
+      var s_data_element_id_to_set_s_json__a_s_as_value = o_element.getAttribute('data-element-id-to-set-s_json__a_s-as-value');
+      var o_self_div = document.querySelector(`div[data-element-id-to-set-s_json__a_s-as-value='${s_data_element_id_to_set_s_json__a_s_as_value}']`)
+      var o_a_s = o_self_div;
+      o_a_s.innerHTML = "";
+      o_a_s.className = "a_o_string"; 
+      var s_id = `o_a_s__${new Date().getTime()}`;
+      o_a_s.id = s_id;
+      o_element.setAttribute('data-o_a_s__id', s_id);
+      for(let s of a_s){
+        var o_txt = document.createElement('span');
+        o_txt.innerText = s; 
+        var o_btn = document.createElement("button");
+        o_btn.onclick = function(){
+          console.log(s);
+          f_delete_s_from_s_json__a_s(o_element, s);
+          f_render_s_json__a_s(o_element)
+        }
+        o_btn.innerText = "x";
+        var o_div = document.createElement("div");
+        o_div.className = "o_string"; 
+        o_div.appendChild(o_txt);
+        o_div.appendChild(o_btn);
+        o_a_s.appendChild(o_div);
+  
+      }
+      //o_element.after(o_a_s);
+  }
+  
+  document.addEventListener("click", function(e){
+    const o_self = e.target.closest(`button.${s_class_for_selector}`);
+    if(o_self){
+      var s_data_element_id_to_set_s_json__a_s_as_value = o_self.getAttribute('data-element-id-to-set-s_json__a_s-as-value');
+      var o_self_input = document.querySelector(`input[data-element-id-to-set-s_json__a_s-as-value='${s_data_element_id_to_set_s_json__a_s_as_value}']`)
+      if(o_self_input){
+        var a_s = f_a_s(o_self_input);
+        a_s.push(o_self_input.value)
+        o_self_input.value = ''
+        f_update_s_json__a_s(o_self_input, a_s)
+        f_render_s_json__a_s(o_self_input)
+      }
+    }
+  });
+  document.addEventListener("keyup", function(e){
+    const o_self = e.target.closest(`input.${s_class_for_selector}`);
+    
+    if(o_self){
+      var a_s = f_a_s(o_self);
+      if(e.keyCode == n_key_code_enter){
+        a_s.push(o_self.value)
+        o_self.value = ''
+        f_update_s_json__a_s(o_self, a_s)
+      }
+      f_render_s_json__a_s(o_self)
+      //console.log(e.keyCode);
+      //console.log(o_self.value)
+    }
+  });
+  var f_interval_update = function(){
+    var a_o = Array.prototype.slice.apply(document.querySelectorAll(".a_s"));
+    for(let o of a_o){
+      var s_data_element_id_to_set_s_json__a_s_as_value = o.getAttribute('data-element-id-to-set-s_json__a_s-as-value');
+      if(s_data_element_id_to_set_s_json__a_s_as_value){
+        var o_el = document.getElementById(s_data_element_id_to_set_s_json__a_s_as_value);
+        var a_s = f_a_s(o_el, "value");
+        f_update_s_json__a_s(o, a_s);
+      }
+      
+    }
+  }
+  
+  window.setInterval(function(){
+      var a_o = Array.prototype.slice.apply(document.querySelectorAll(`input.${s_class_for_selector}`));
+    for(let o of a_o){
+      var s_data_element_id_to_set_s_json__a_s_as_value = o.getAttribute('data-element-id-to-set-s_json__a_s-as-value');
+      var s_json__a_s = o.getAttribute('s_json__a_s');
+      if(s_data_element_id_to_set_s_json__a_s_as_value){
+        var o_el = document.getElementById(s_data_element_id_to_set_s_json__a_s_as_value);
+        if(o_el.value != s_json__a_s){
+          var a_s = f_a_s(o_el, "value"); 
+        f_update_s_json__a_s(o, a_s);
+        }
+          //console.log(o_el);
+        //console.log(o_el.getAttribute("value"));
+        //console.log(o_el.value);
+      }
+      
+    }
+    
+  },1000)
+  
+  // f_interval_update();
+  
+  })()
+  
+  var o_div = document.createElement("div");
+  o_div.innerHTML = `
+  <input class='input_type_tag_5ff8be1d-37bc-4e4e-abca-3c0707082cc0' data-element-id-to-set-s_json__a_s-as-value='my_hidden_input'>
+  </input>
+  <button class='input_type_tag_5ff8be1d-37bc-4e4e-abca-3c0707082cc0' data-element-id-to-set-s_json__a_s-as-value='my_hidden_input'>Add
+  </button>
+  <div class='input_type_tag_5ff8be1d-37bc-4e4e-abca-3c0707082cc0' data-element-id-to-set-s_json__a_s-as-value='my_hidden_input'></div>
+  <input type="hidden" id="my_hidden_input" value='["a", "b", "1", "2"]'/>`;
+  document.body.appendChild(o_div);
+  
+  document.querySelector("#my_hidden_input").onchange = function(){
+    console.log(this.value)
+  }
+  
+        </script>
+    </body>
+</html>
