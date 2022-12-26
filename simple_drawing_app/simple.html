@@ -1,0 +1,13 @@
+var points = [{x:1,y:1},{x:2,y:3},{x:3,y:4},{x:4,y:2},{x:5,y:6}] //took 5 example points
+ctx.moveTo((points[0].x), points[0].y);
+
+for(var i = 0; i < points.length-1; i ++)
+{
+
+  var x_mid = (points[i].x + points[i+1].x) / 2;
+  var y_mid = (points[i].y + points[i+1].y) / 2;
+  var cp_x1 = (x_mid + points[i].x) / 2;
+  var cp_x2 = (x_mid + points[i+1].x) / 2;
+  ctx.quadraticCurveTo(cp_x1,points[i].y ,x_mid, y_mid);
+  ctx.quadraticCurveTo(cp_x2,points[i+1].y ,points[i+1].x,points[i+1].y);
+}
