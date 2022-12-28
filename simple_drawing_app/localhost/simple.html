@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <meta charset="UTF-8" />
+    <title>title</title>
+</head>
+
+<body>
+
+</body>
+<script type="module">
+
+    class O_point_2d {
+        constructor(n_x, n_y) {
+            this.n_x = n_x,
+            this.n_y = n_y
+        }
+    }
+    class O_path_2d{
+        constructor(a_o_point_2d){
+            this.a_o_point_2d = a_o_point_2d
+        }
+    }
+    class O_cursor{
+        constructor(o_point_2d){
+            this.o_point_2d = o_point_2d
+        }
+    }
+    var o_canvas = document.createElement("canvas");
+
+    var f_resize_canvas = function(o_canvas){
+        o_canvas.width = window.innerWidth;
+        o_canvas.height = window.innerHeight;
+    }
+    window.onresize = function(){
+        f_resize_canvas(o_canvas);
+    };
+    f_resize_canvas(o_canvas);
+
+    var o_ctx = o_canvas.getContext("2d");
+    document.body.appendChild(o_canvas);
+    // var a_o_point_2d__static_example = [
+    //     new O_point_2d(1 * 10, 1 * 10),
+    //     new O_point_2d(2 * 10, 3 * 10),
+    //     new O_point_2d(3 * 10, 4 * 10),
+    //     new O_point_2d(4 * 10, 2 * 10),
+    //     new O_point_2d(5 * 10, 6 * 10)
+    // ]
+    // o_ctx.moveTo((points[0].x), points[0].y);
+
+    // for (var i = 0; i < points.length - 1; i++) {
+
+    //     var x_mid = (points[i].x + points[i + 1].x) / 2;
+    //     var y_mid = (points[i].y + points[i + 1].y) / 2;
+    //     var cp_x1 = (x_mid + points[i].x) / 2;
+    //     var cp_x2 = (x_mid + points[i + 1].x) / 2;
+    //     o_ctx.quadraticCurveTo(cp_x1, points[i].y, x_mid, y_mid);
+    //     o_ctx.quadraticCurveTo(cp_x2, points[i + 1].y, points[i + 1].x, points[i + 1].y);
+    // }
+    var f_draw_line_from_a_o_point_2d = function(o_ctx, a_o_point_2d){
+        if(a_o_point_2d.length < 2){return}
+        var o_point_2d__first = a_o_point_2d[0];
+        o_ctx.beginPath();
+        o_ctx.moveTo((o_point_2d__first.n_x), o_point_2d__first.n_y);
+        for (let n_index = 0; n_index < a_o_point_2d.length-1; n_index += 1) {
+            var o_point_2d = a_o_point_2d[n_index];
+            var o_point_2d__next = a_o_point_2d[n_index + 1];
+            o_ctx.lineTo(
+                o_point_2d__next.n_x,
+                o_point_2d__next.n_y,
+            )
+            o_ctx.moveTo(
+                o_point_2d__next.n_x,
+                o_point_2d__next.n_y,
+            )
+        }
+        o_ctx.stroke();
+    }
+    
+    var f_draw_smoth_line_from_a_o_point_2d = function (o_ctx, a_o_point_2d) {
+        var n_tau = 6.2831;
+        if(a_o_point_2d.length < 2){return}
+        var o_point_2d__first = a_o_point_2d[0];
+        o_ctx.beginPath();
+        o_ctx.moveTo((o_point_2d__first.n_x), o_point_2d__first.n_y);
+        for (let n_index = 0; n_index < a_o_point_2d.length-1; n_index += 1) {
+            var o_point_2d = a_o_point_2d[n_index];
+            var o_point_2d__next = a_o_point_2d[n_index + 1];
+
+            var o_point_2d__average = new O_point_2d(
+                (o_point_2d.n_x + o_point_2d__next.n_x) / 2,
+                (o_point_2d.n_y + o_point_2d__next.n_y) / 2
+            );
+            // o_ctx.quadraticCurveTo(
+            //     o_point_2d.n_x,
+            //     o_point_2d.n_y, 
+            //     o_point_2d__average.n_x, 
+            //     o_point_2d__average.n_y
+            // );
+
+        }
+        for (let n_index = 0; n_index < a_o_point_2d.length-1; n_index += 1) {
+            var o_point_2d = a_o_point_2d[n_index];
+            var o_point_2d__next = a_o_point_2d[n_index + 1];
+
+            var o_point_2d__average = new O_point_2d(
+                (o_point_2d.n_x + o_point_2d__next.n_x) / 2,
+                (o_point_2d.n_y + o_point_2d__next.n_y) / 2
+            );
+            var o_point_2d__diff = new O_point_2d(
+                (o_point_2d.n_x - o_point_2d__next.n_x),
+                (o_point_2d.n_y - o_point_2d__next.n_y)
+            );
+            var n_strength_nor = 1.;
+
+            var o_point_2d__control = new O_point_2d(
+                o_point_2d__average.n_x+o_point_2d__diff.n_x*(0.5-n_strength_nor*0.5), 
+                o_point_2d__average.n_y+o_point_2d__diff.n_y*(0.5-n_strength_nor*0.5)
+            );
+            o_ctx.fillStyle = "red";
+            o_ctx.fillRect(
+                o_point_2d__control.n_x, 
+                o_point_2d__control.n_y, 
+                20, 
+                20,
+            )
+
+            o_ctx.quadraticCurveTo(
+                o_point_2d.n_x,
+                o_point_2d.n_y, 
+                o_point_2d__control.n_x, 
+                o_point_2d__control.n_y, 
+            );
+        }
+
+        o_ctx.stroke();
+
+    }
+    var f_test1 = function(o_ctx, points){
+        o_ctx.beginPath();
+        var points = a_o_point_2d;
+        o_ctx.moveTo((points[0].n_x), points[0].n_y);
+        for (var i = 0; i < points.length - 1; i++) {
+
+            var x_mid = (points[i].n_x + points[i + 1].n_x) / 2;
+            var y_mid = (points[i].n_y + points[i + 1].n_y) / 2;
+            var cp_x1 = (x_mid + points[i].n_x) / 2;
+            var cp_x2 = (x_mid + points[i + 1].n_x) / 2;
+            o_ctx.quadraticCurveTo(cp_x1, points[i].n_y, x_mid, y_mid);
+            o_ctx.quadraticCurveTo(cp_x2, points[i + 1].n_y, points[i + 1].n_x, points[i + 1].n_y);
+        }
+        o_ctx.strokeStyle = "red";
+        o_ctx.stroke();
+    }
+
+    var a_o_point_2d = []
+    var a_o_path_2d = [];
+    var o_path_2d = new O_path_2d([]);
+
+    var b_mouse_down = false;
+    o_canvas.onmousedown = function () {
+        b_mouse_down = true;
+        a_o_path_2d.push(o_path_2d);
+    }
+    o_canvas.onmouseup = function () {
+        b_mouse_down = false;
+        o_path_2d = new O_path_2d([]);
+    }
+
+    var n_ts_ms = window.performance.now();
+    var n_ts_ms__diff = 0;
+    var n_points = 0;
+    var o_cursor = new O_cursor(
+        new O_point_2d(
+            0,0
+        )
+    );
+    var o_cursor__last = new O_cursor(
+        new O_point_2d(
+            0,0
+        )
+    );
+    var o_cursor__diff = new O_cursor(
+        new O_point_2d(
+            0,0
+        )
+    );
+    var n_ms_threshhold = 0;
+    o_canvas.onmousemove = function () {
+        o_cursor.o_point_2d.n_x = window.event.clientX;
+        o_cursor.o_point_2d.n_y = window.event.clientY;
+
+        o_cursor__diff.o_point_2d.n_x = o_cursor.o_point_2d.n_x - o_cursor__last.o_point_2d.n_x;
+        o_cursor__diff.o_point_2d.n_y = o_cursor.o_point_2d.n_y - o_cursor__last.o_point_2d.n_y;
+
+        o_cursor__last = new O_cursor(
+            new O_point_2d(
+                o_cursor.o_point_2d.n_x,
+                o_cursor.o_point_2d.n_y,
+            )
+        );
+        if (b_mouse_down) {
+            n_ts_ms__diff = window.performance.now() - n_ts_ms;
+            if(Math.abs(n_ts_ms__diff) > n_ms_threshhold){
+
+                var n_length = Math.sqrt(
+                    o_cursor__diff.o_point_2d.n_x*o_cursor__diff.o_point_2d.n_x+
+                    o_cursor__diff.o_point_2d.n_y*o_cursor__diff.o_point_2d.n_y
+                );
+                var n_max_distance_cursor_can_move = Math.sqrt(o_canvas.height*o_canvas.height+o_canvas.width*o_canvas.width);
+                n_max_distance_cursor_can_move = Math.sqrt(o_canvas.height*o_canvas.height+o_canvas.width*o_canvas.width)/2;// half the screen
+                n_max_distance_cursor_can_move = Math.sqrt(o_canvas.height*o_canvas.height+o_canvas.width*o_canvas.width)/10;// a tenth of the screen
+                n_max_distance_cursor_can_move = Math.sqrt(o_canvas.height*o_canvas.height+o_canvas.width*o_canvas.width)/100;// a hundrest of the screen
+                n_max_distance_cursor_can_move = Math.sqrt(o_canvas.height*o_canvas.height+o_canvas.width*o_canvas.width)/120;
+                var n_length_nor = n_length / n_max_distance_cursor_can_move;
+                n_ms_threshhold = Math.max(0, (1.-n_length_nor)*77);
+                console.log("n_length_nor")
+                console.log(n_length_nor)
+                // console.log("n_ms_threshhold")
+                // console.log(n_ms_threshhold)
+                // console.log("n_length_nor")
+                // console.log(n_length_nor)
+                n_ts_ms = window.performance.now()
+                n_points+=1;
+                o_path_2d.a_o_point_2d.push(
+                    new O_point_2d(
+                        window.event.clientX,
+                        window.event.clientY,
+                    )
+                )   
+            }
+        }
+    }
+    var f_render = function(){
+        o_ctx.fillStyle = "black";
+        o_ctx.fillRect(0, 0, o_canvas.width, o_canvas.height);//clear
+        for(let o_path_2d of a_o_path_2d){
+            o_ctx.strokeStyle = "red";
+            f_draw_line_from_a_o_point_2d(o_ctx, o_path_2d.a_o_point_2d);
+            o_ctx.strokeStyle = "green";
+            f_draw_smoth_line_from_a_o_point_2d(o_ctx, o_path_2d.a_o_point_2d);
+        }
+        // draw o_cursor 
+        o_ctx.font = "30px Arial";
+        o_ctx.fillStyle = "red"
+        o_ctx.fillText("🤣 jonas", o_cursor.o_point_2d.n_x, o_cursor.o_point_2d.n_y); 
+
+    }
+    var n_anim_id = 0;
+    var n_ts_ms__frame = window.performance.now();
+    var n_ts_ms__frame_diff = window.performance.now();
+    var f_render__recursive = function(){
+        n_ts_ms__frame_diff = window.performance.now() - n_ts_ms__frame;
+        n_ts_ms__frame = window.performance.now();
+        // console.log(`frame time (ms): ${n_ts_ms__frame_diff}`)
+        // console.log(`fps: ${parseInt(1000/n_ts_ms__frame_diff)}`)
+        // console.log(`n_points: ${n_points}`)
+        n_anim_id = requestAnimationFrame(f_render__recursive);
+        f_render();
+    }
+
+    f_render__recursive();
+
+</script>
+
+</html>
