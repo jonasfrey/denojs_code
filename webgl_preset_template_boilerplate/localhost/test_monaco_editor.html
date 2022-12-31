@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>title</title>
+  <script src="monaco_editor_loader.min.js"></script>
+  <style>
+    /*fix */
+.o_editor {
+    height: 100vh;
+}
+
+  </style>
+
+</head>
+<body>
+  <div id="app"></div>
+  <div id="editor"></div>
+  <script type="module" defer>
+
+
+
+require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } })
+
+window.MonacoEnvironment = {
+    getWorkerUrl: function (workerId, label) {
+        return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+      self.MonacoEnvironment = {
+        baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/base/worker/workerMain.js');`
+        )}`
+    }
+}
+
+let o_editor = document.createElement("div");
+    o_editor.className = "o_editor ";
+
+    document.body.appendChild(o_editor)
+    require(['vs/editor/editor.main'], function () {
+        let o_monaco_editor = monaco.editor.create(o_editor, {
+            value: 'legg meine eye',
+            language: 'javascript',
+            theme: "vs-dark",
+        })
+        // o_monaco_editor.onDidChangeModelContent(function (e) {
+        //   console.log(e)
+        //   var s_function_body = o_monaco_editor.getValue();
+        //   console.log(o_monaco_editor.getValue())
+        // });
+        // o_monaco_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => console.log("hello world"))
+    })
+    require(['vs/editor/editor.main'], function () {
+        let o_monaco_editor = monaco.editor.create(
+          document.querySelector("#editor"), {
+            value: 'legg meine eye',
+            language: 'javascript',
+            theme: "vs-dark",
+        })
+        // o_monaco_editor.onDidChangeModelContent(function (e) {
+        //   console.log(e)
+        //   var s_function_body = o_monaco_editor.getValue();
+        //   console.log(o_monaco_editor.getValue())
+        // });
+        // o_monaco_editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => console.log("hello world"))
+    })
+
+    
+  </script>
+</body>
+</html>

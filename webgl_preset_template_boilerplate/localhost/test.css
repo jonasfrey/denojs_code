@@ -1,0 +1,63 @@
+ body .d-flex {
+     display: flex;
+ }
+
+ body canvas {
+     width: 100%;
+     height: 100%;
+ }
+
+ body .o_canvas,
+ .editors {
+     width: 100%;
+     height: 100vh;
+     aspect-ratio: 1;
+     max-height: 100vh;
+ }
+
+ body .o_canvas,
+ .editors {
+     width: 100%;
+     height: 100vh;
+     aspect-ratio: 1;
+     max-height: 100vh;
+ }
+
+ body .o_editor {
+     height: 100vh;
+ }
+
+ body .editors {
+     position: relative;
+ }
+
+ body .monaco_editor {
+     width: 100%;
+     height: 100vh;
+     z-index: 20;
+     top: 0;
+     left: 0;
+     position: absolute;
+ }
+
+ body .d_flex {
+     display: flex;
+ }
+
+ .o_monaco_editor_tab:hover {
+     background: red;
+ }
+
+ .a_o_monaco_editor_tab .o_monaco_editor_tab {
+     padding: 1rem;
+     background: blue;
+ }
+
+ body .a_o_monaco_editor_tab {
+     display: flex;
+ }
+
+ body {
+     font-family: arial;
+     font-size: 1.2rem;
+ }
