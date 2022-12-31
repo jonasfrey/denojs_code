@@ -29,10 +29,17 @@ var f_http_request_handler = async function(
                 // }, 100)
             };
             socket.onmessage = (e) => {
-                console.log(e.data);
-                for(var o_socket of a_o_socket){
-                    if(o_socket != socket){
-                        o_socket.send(e.data);
+                console.log("socket.onmessage called!")
+                var n_ready_state_open = 1;
+                // console.log(e.target.readyState)
+                if(e.target.readyState == n_ready_state_open){
+                    for(var o_socket of a_o_socket){
+                        if(o_socket != socket){
+                            console.log("e.target.readyState!")
+                            console.log(e.target.readyState)
+                            console.log("o_socket.send(e.data); called!")
+                            o_socket.send(e.data);
+                        }
                     }
                 }
                 // socket.close();

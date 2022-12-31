@@ -271,12 +271,20 @@ class O_point_2d {
     }
 }
 class O_path_2d{
-    constructor(a_o_point_2d){
+    constructor(
+        n_id, 
+        a_o_point_2d
+        ){
+        this.n_id = n_id, 
         this.a_o_point_2d = a_o_point_2d
     }
 }
 class O_cursor{
-    constructor(o_point_2d){
+    constructor(
+        s_name, 
+        o_point_2d
+    ){
+        this.s_name = s_name
         this.o_point_2d = o_point_2d
     }
 }
@@ -303,6 +311,7 @@ window.o_vue_object = new Vue({
         n_anim_id:  0,
         n_ts_ms__render:  window.performance.now(),
         n_ts_ms__render_diff:  window.performance.now(),
+        a_o_cursor: [],
         f_init: function(){
             // Create WebSocket connection.
 
@@ -313,10 +322,21 @@ window.o_vue_object = new Vue({
             
             // Listen for messages
             o_ws.addEventListener('message', (o_event) => {
-                var o_cursor = JSON.parse(o_event.data);
+                var o_cursor__from_ws_server = JSON.parse(o_event.data);
                 console.log("o_ws.message() was called!");
                 // console.log('Message from server ', event.data);
                 Object.assign(o_self.o_cursor, o_cursor);
+                var b_existing = false;
+                for(var o_cursor of o_self.a_o_cursor){
+                    if(o_cursor.s_name == o_cursor__from_ws_server.s_name){
+                        Object.assign(o_cursor, o_cursor__from_ws_server)
+                        b_existing = true
+                    }
+                }
+                if(!b_existing){
+                    o_self.a_o_cursor.push(o_cursor__from_ws_server);
+                }
+
             });
             var o_self = this;
             window.addEventListener('resize', function(){
@@ -340,17 +360,23 @@ window.o_vue_object = new Vue({
             o_self.n_ts_ms__mousemove_diff = 0;
             o_self.n_points = 0;
             o_self.n_ms_threshhold = 0;
+            var s_name = prompt("enter your name!: ")
             o_self.o_cursor = new O_cursor(
+                s_name,
                 new O_point_2d(
                     0,0
                 )
             );
+            o_self.a_o_cursor.push(o_self.o_cursor);
+
             o_self.o_cursor__last = new O_cursor(
+                s_name,
                 new O_point_2d(
                     0,0
                 )
             );
             o_self.o_cursor__diff = new O_cursor(
+                s_name,
                 new O_point_2d(
                     0,0
                 )
@@ -358,7 +384,10 @@ window.o_vue_object = new Vue({
             o_self.o_canvas.addEventListener('mousemove', function(){
                 o_self.f_onmousemove_o_canvas();
             })
-            o_self.f_render_canvas__recursive();   
+            o_self.f_render_canvas__recursive();
+            
+            o_self.f_resize_canvas(o_self.o_canvas);
+            
         },
         f_onresize_window: function(){
             var o_self = this;
@@ -377,7 +406,7 @@ window.o_vue_object = new Vue({
         f_onmouseup_o_canvas: function(){
             var o_self = this;
             o_self.b_mouse_down = false;
-            o_self.o_path_2d = new O_path_2d([]);
+            o_self.o_path_2d = new O_path_2d(new Date().getTime(), []);
         },
         f_onmousemove_o_canvas: function(){
             var o_self = this;
@@ -390,12 +419,7 @@ window.o_vue_object = new Vue({
             o_sdnw.o_cursor__diff.o_point_2d.n_x = o_sdnw.o_cursor.o_point_2d.n_x - o_sdnw.o_cursor__last.o_point_2d.n_x;
             o_sdnw.o_cursor__diff.o_point_2d.n_y = o_sdnw.o_cursor.o_point_2d.n_y - o_sdnw.o_cursor__last.o_point_2d.n_y;
 
-            o_sdnw.o_cursor__last = new O_cursor(
-                new O_point_2d(
-                    o_sdnw.o_cursor.o_point_2d.n_x,
-                    o_sdnw.o_cursor.o_point_2d.n_y,
-                )
-            );
+            Object.assign(o_sdnw.o_cursor__last, o_sdnw.o_cursor);
             if (o_sdnw.b_mouse_down) {
                 o_sdnw.n_ts_ms__mousemove_diff = window.performance.now() - o_sdnw.n_ts_ms__mousemove;
                 var o_canvas = o_sdnw.o_canvas;
@@ -440,11 +464,18 @@ window.o_vue_object = new Vue({
                 o_sdnw.o_ctx.strokeStyle = "green";
                 o_self.f_draw_smoth_line_from_a_o_point_2d(o_sdnw.o_ctx, o_path_2d.a_o_point_2d);
             }
-            // draw o_cursor 
-            o_sdnw.o_ctx.font = "30px Arial";
-            o_sdnw.o_ctx.fillStyle = "red"
-            o_sdnw.o_ctx.fillText("🤣 jonas", o_sdnw.o_cursor.o_point_2d.n_x, o_sdnw.o_cursor.o_point_2d.n_y); 
-    
+            for(let o_cursor of o_self.a_o_cursor){
+
+                // draw o_cursor 
+                o_sdnw.o_ctx.font = "30px Arial";
+                o_sdnw.o_ctx.fillStyle = "red"
+                o_sdnw.o_ctx.fillText(
+                    o_cursor.s_name, 
+                    o_cursor.o_point_2d.n_x, 
+                    o_cursor.o_point_2d.n_y
+                ); 
+        
+            }
         },
         f_clear_canvas: function(){
             var o_self = this;
@@ -570,7 +601,7 @@ window.o_vue_object = new Vue({
             var b_o_data_compatible = o_self.f_b_o_data_compatible(o_data_from_url_fragment, o_self.o_data);
             if(b_o_data_compatible){
                 o_self.o_data = o_data_from_url_fragment;
-                Object.assign(o_self.$options.o_static_data_non_watched,o_self.o_data.o_static_data_non_watched)
+                // Object.assign(o_self.$options.o_static_data_non_watched,o_self.o_data.o_static_data_non_watched)
             }
         }
         o_self.$options.o_static_data_non_watched.f_init();
